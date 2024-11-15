@@ -11,12 +11,12 @@ const PoseDetection = () => {
 
   // Memoize the onResults function to avoid re-creating it unnecessarily
   const onResults = useCallback((results) => {
-    const canvasCtx = canvasRef.current.getContext('2d');
-    canvasCtx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+    const canvasElement = canvasRef.current;
+    const canvasCtx = canvasElement.getContext('2d');
+    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
 
-    // Draw the pose landmarks on the canvas
     if (results.poseLandmarks) {
-      drawPose(results.poseLandmarks, canvasCtx);
+      drawStickFigure(results.poseLandmarks, canvasCtx);
       rightBicepCurl(results.poseLandmarks, canvasCtx);
     }
   }, []);
@@ -48,11 +48,27 @@ const PoseDetection = () => {
       camera.start();
     }
 
-  }, [onResults]);  // Add 'onResults' to the dependency array
+  }, [onResults]);
 
-  // Function to draw pose landmarks on canvas
-  const drawPose = (landmarks, ctx) => {
+  // Function to draw pose landmarks as a stick figure on canvas
+  const drawStickFigure = (landmarks, ctx) => {
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = 'rgba(0, 255, 0, 0.6)';
     ctx.fillStyle = 'rgba(255, 0, 0, 1)';
+
+    // Draw lines connecting key points to form a stick figure
+    const connections = pose.POSE_CONNECTIONS;
+    connections.forEach(([startIdx, endIdx]) => {
+      const startPoint = landmarks[startIdx];
+      const endPoint = landmarks[endIdx];
+
+      ctx.beginPath();
+      ctx.moveTo(startPoint.x * canvasRef.current.width, startPoint.y * canvasRef.current.height);
+      ctx.lineTo(endPoint.x * canvasRef.current.width, endPoint.y * canvasRef.current.height);
+      ctx.stroke();
+    });
+
+    // Draw landmarks as circles
     for (let i = 0; i < landmarks.length; i++) {
       const x = landmarks[i].x * canvasRef.current.width;
       const y = landmarks[i].y * canvasRef.current.height;
@@ -120,9 +136,9 @@ const PoseDetection = () => {
     console.log("counter = " + counter);
 
     // Draw the angles on the canvas
-    ctx.font = '20px Arial';
+    ctx.font = '16px Arial';
     ctx.fillStyle = 'green';
-    ctx.fillText(`Right Arm Angle: ${Math.round(leftBicepCurlAngle)}`, 50, 50);
+    ctx.fillText(`Left Arm Angle: ${Math.round(leftBicepCurlAngle)}`, 50, 100);
   };
 
 
@@ -142,9 +158,28 @@ const PoseDetection = () => {
   };
 
   return (
-    <div>
-      <video ref={videoRef}></video>
-      <canvas ref={canvasRef} width="640" height="480" style={{ border: '1px solid black' }}></canvas>
+    <div style={{ display: 'flex', justifyContent: 'space-around', padding: '20px' }}>
+      {/* Camera Feed */}
+      <div style={{ position: 'relative' }}>
+        <h2>Live Camera Feed</h2>
+        <video
+          ref={videoRef}
+          style={{ width: '640px', height: '480px', border: '1px solid black' }}
+          autoPlay
+          muted
+        ></video>
+      </div>
+
+      {/* Stick Figure Visualization */}
+      <div style={{ position: 'relative' }}>
+        <h2>Pose Representation</h2>
+        <canvas
+          ref={canvasRef}
+          width="640"
+          height="480"
+          style={{ border: '1px solid black' }}
+        ></canvas>
+      </div>
     </div>
   );
 };
