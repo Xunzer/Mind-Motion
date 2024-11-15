@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback, useState } from 'react';
 import * as pose from '@mediapipe/pose';
 import * as cam from '@mediapipe/camera_utils';
 
@@ -6,6 +6,8 @@ const PoseDetection = () => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const poseRef = useRef(null);
+  let stage = "";
+  let counter = 0;
 
   // Memoize the onResults function to avoid re-creating it unnecessarily
   const onResults = useCallback((results) => {
@@ -15,7 +17,7 @@ const PoseDetection = () => {
     // Draw the pose landmarks on the canvas
     if (results.poseLandmarks) {
       drawPose(results.poseLandmarks, canvasCtx);
-      calculateAngles(results.poseLandmarks, canvasCtx);
+      rightBicepCurl(results.poseLandmarks, canvasCtx);
     }
   }, []);
 
@@ -27,8 +29,8 @@ const PoseDetection = () => {
     poseInstance.setOptions({
       modelComplexity: 1,
       smoothLandmarks: true,
-      minDetectionConfidence: 0.7,
-      minTrackingConfidence: 0.7,
+      minDetectionConfidence: 0.9,
+      minTrackingConfidence: 0.9,
     });
 
     poseInstance.onResults(onResults);
@@ -61,25 +63,68 @@ const PoseDetection = () => {
   };
 
   // Calculate angles between shoulder, elbow, and wrist for both arms
-  const calculateAngles = (landmarks, ctx) => {
-    const rightAngle = calculateAngle(
+  const rightBicepCurl = (landmarks, ctx) => {
+    if (!landmarks) {
+      return;
+    }
+    if (counter >= 10){
+      console.log("You finished this exercise, move to the next one!")
+      return;
+    }
+    const rightBicepCurlAngle = calculateAngle(
       landmarks[pose.POSE_LANDMARKS.RIGHT_SHOULDER],
       landmarks[pose.POSE_LANDMARKS.RIGHT_ELBOW],
       landmarks[pose.POSE_LANDMARKS.RIGHT_WRIST]
     );
-
-    const leftAngle = calculateAngle(
-      landmarks[pose.POSE_LANDMARKS.LEFT_SHOULDER],
-      landmarks[pose.POSE_LANDMARKS.LEFT_ELBOW],
-      landmarks[pose.POSE_LANDMARKS.LEFT_WRIST]
-    );
+    console.log("Right Bicep Curl Angle: " + rightBicepCurlAngle);
+    if (rightBicepCurlAngle >= 100) {
+      stage = "down"
+    } else if (rightBicepCurlAngle <= 40 && stage === "down") {
+      stage = "up"
+      counter = counter + 1
+      console.log("good move! ")
+    } else if (rightBicepCurlAngle > 40 && rightBicepCurlAngle < 100 && stage === "down" ){
+      console.log("curl more")
+    }
+    console.log("counter = " + counter);
 
     // Draw the angles on the canvas
     ctx.font = '20px Arial';
     ctx.fillStyle = 'green';
-    ctx.fillText(`Right Arm Angle: ${Math.round(rightAngle)}`, 50, 50);
-    ctx.fillText(`Left Arm Angle: ${Math.round(leftAngle)}`, 50, 100);
+    ctx.fillText(`Right Arm Angle: ${Math.round(rightBicepCurlAngle)}`, 50, 50);
   };
+
+  const leftBicepCurl = (landmarks, ctx) => {
+    if (!landmarks) {
+      return;
+    }
+    const leftBicepCurlAngle = calculateAngle(
+      landmarks[pose.POSE_LANDMARKS.LEFT_SHOULDER],
+      landmarks[pose.POSE_LANDMARKS.LEFT_ELBOW],
+      landmarks[pose.POSE_LANDMARKS.LEFT_WRIST]
+    );
+    if (counter >= 10){
+      console.log("You finished this exercise, move to the next one!")
+      return;
+    }
+    console.log("Right Bicep Curl Angle: " + leftBicepCurlAngle);
+    if (leftBicepCurlAngle >= 100) {
+      stage = "down"
+    } else if (leftBicepCurlAngle <= 40 && stage === "down") {
+      stage = "up"
+      counter = counter + 1
+      console.log("good move! ")
+    } else if (leftBicepCurlAngle > 40 && leftBicepCurlAngle < 100 && stage === "down" ){
+      console.log("curl more")
+    }
+    console.log("counter = " + counter);
+
+    // Draw the angles on the canvas
+    ctx.font = '20px Arial';
+    ctx.fillStyle = 'green';
+    ctx.fillText(`Right Arm Angle: ${Math.round(leftBicepCurlAngle)}`, 50, 50);
+  };
+
 
   // Function to calculate angle between three points
   const calculateAngle = (pointA, pointB, pointC) => {
