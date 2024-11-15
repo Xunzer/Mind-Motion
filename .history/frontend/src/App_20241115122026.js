@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import Sign_Up_Page from "./Sign_Up/Sign_Up_Page"
+import Sign_Up_Page from "./Pages/Sign_Up_Page"
 function App() {
   return (
     <div >
