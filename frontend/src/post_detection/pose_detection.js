@@ -98,7 +98,7 @@ const PoseDetection = () => {
 
   return (
     <div>
-      <video ref={videoRef} style={{ display: 'none' }}></video>
+      <video ref={videoRef}></video>
       <canvas ref={canvasRef} width="640" height="480" style={{ border: '1px solid black' }}></canvas>
     </div>
   );
