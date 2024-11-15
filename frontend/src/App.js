@@ -7,7 +7,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/post_detection" element={<PoseDetection/>} />
+        <Route path="/pose_detection" element={<PoseDetection/>} />
       </Routes>
     </Router>
   );
