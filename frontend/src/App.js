@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import GamingPage from './gamingPage/gamingPage';
 import SignUpPage from "./signUpPage/signUpPage"
-import Intropage from "./introPage/introPage"
+import IntroPage from "./introPage/introPage"
 import './App.css';
 
 const App = () => {
@@ -11,7 +11,7 @@ const App = () => {
       <Routes>
         <Route path="/stage" element={<GamingPage />} />
         <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/intro" element={<Intropage />} />
+        <Route path="/intro" element={<IntroPage />} />
       </Routes>
     </Router>
   );
