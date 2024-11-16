@@ -5,10 +5,8 @@ import Intro_page from "./Intro_Page/Intro_Page"
 function App() {
   return (
     <div >
-      <Intro_page/>
+      {/* <Intro_page/> */}
       <Sign_Up_Page/>
-
-      
     </div>
   );
 }

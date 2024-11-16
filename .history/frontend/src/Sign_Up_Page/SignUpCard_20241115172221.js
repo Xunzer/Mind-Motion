@@ -183,7 +183,10 @@ export default function SignUpCard({signUpToSignInTransition}) {
             fullWidth
           />
         </FormControl>
-
+        <FormControlLabel
+          control={<Checkbox name="terms" />}
+          label="I agree to the terms and conditions"
+        />
         <Button type="submit" variant="contained" fullWidth>
           Sign up
         </Button>
