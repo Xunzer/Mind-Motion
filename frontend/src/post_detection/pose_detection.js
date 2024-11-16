@@ -17,7 +17,7 @@ const PoseDetection = () => {
 
     if (results.poseLandmarks) {
       drawStickFigure(results.poseLandmarks, canvasCtx);
-      openArms(results.poseLandmarks, canvasCtx);
+      leftKneeExtension(results.poseLandmarks, canvasCtx); // change to knee extension
     }
   }, []);
 
