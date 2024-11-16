@@ -29,8 +29,8 @@ const PoseDetection = () => {
     poseInstance.setOptions({
       modelComplexity: 1,
       smoothLandmarks: true,
-      minDetectionConfidence: 0.9,
-      minTrackingConfidence: 0.9,
+      minDetectionConfidence: 0.5,
+      minTrackingConfidence: 0.5,
     });
 
     poseInstance.onResults(onResults);
@@ -93,7 +93,7 @@ const PoseDetection = () => {
       landmarks[pose.POSE_LANDMARKS.RIGHT_WRIST]
     );
     console.log("Right Bicep Curl Angle: " + rightBicepCurlAngle);
-    if (rightBicepCurlAngle >= 100) {
+    if (rightBicepCurlAngle >= 100 && rightBicepCurlAngle < 115) {
       stage = "down"
     } else if (rightBicepCurlAngle <= 40 && stage === "down") {
       stage = "up"
@@ -124,7 +124,7 @@ const PoseDetection = () => {
       return;
     }
     console.log("Right Bicep Curl Angle: " + leftBicepCurlAngle);
-    if (leftBicepCurlAngle >= 100) {
+    if (leftBicepCurlAngle >= 100 && leftBicepCurlAngle < 115) {
       stage = "down"
     } else if (leftBicepCurlAngle <= 40 && stage === "down") {
       stage = "up"
