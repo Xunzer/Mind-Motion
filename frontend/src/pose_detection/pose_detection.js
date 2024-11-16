@@ -243,6 +243,11 @@ const PoseDetection = () => {
     const hip = landmarks[pose.POSE_LANDMARKS.RIGHT_HIP];
     const wrist = landmarks[pose.POSE_LANDMARKS.RIGHT_WRIST];
 
+    if (counter >= 10){
+      console.log("You finished this exercise, move to the next one!")
+      return;
+    }
+
     if (!isElbowPinned(elbow, hip)){
       console.log("Keep your elbow pinned to your side.");
       return;
