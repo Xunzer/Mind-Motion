@@ -114,7 +114,7 @@ const GamingPage = () => {
               <ListItemIcon sx={{ minWidth: 0, justifyContent: 'center', mr: 3 }}>
                 <LooksOneIcon sx={{  }}/>
               </ListItemIcon>
-              <ListItemText primary="Stage 1" primaryTypographyProps={{ style: text }} />
+              <ListItemText primary="Exercise 1" primaryTypographyProps={{ style: text }} />
             </ListItemButton>
           </ListItem>
 
@@ -123,7 +123,7 @@ const GamingPage = () => {
               <ListItemIcon sx={{ minWidth: 0, justifyContent: 'center', mr: 3 }}>
                 <LooksTwoIcon sx={{  }} />
               </ListItemIcon>
-              <ListItemText primary="Stage 2" primaryTypographyProps={{ style: text }} />
+              <ListItemText primary="Exercise 2" primaryTypographyProps={{ style: text }} />
             </ListItemButton>
           </ListItem>
 
@@ -132,7 +132,7 @@ const GamingPage = () => {
               <ListItemIcon sx={{ minWidth: 0, justifyContent: 'center', mr: 3 }}>
                 <Looks3Icon sx={{  }} />
               </ListItemIcon>
-              <ListItemText primary="Stage 3" primaryTypographyProps={{ style: text }} />
+              <ListItemText primary="Exercise 3" primaryTypographyProps={{ style: text }} />
             </ListItemButton>
           </ListItem>
           <Divider />
