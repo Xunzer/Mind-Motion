@@ -11,9 +11,10 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import { styled } from '@mui/material/styles';
-
+import { useNavigate } from 'react-router-dom';
 import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
+import { useMemo } from 'react';
 
 import FormControlLabel from '@mui/material/FormControlLabel';
 
@@ -42,7 +43,7 @@ export default function SignUpCard({signUpToSignInTransition}) {
   const [confirmPasswordError, setConfirmPasswordError] = React.useState(false);
   const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] =
     React.useState('');
-
+  const navigate = useNavigate();
   const validateInputs = () => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
@@ -88,6 +89,14 @@ export default function SignUpCard({signUpToSignInTransition}) {
         email: formData.get('email'),
         password: formData.get('password'),
       });
+      let email = formData.get('email')
+      let password = formData.get('password')
+      //TODO if valid, then save to local storage (jwt)
+      const mockJwtToken = btoa(JSON.stringify({ email, password, timestamp: Date.now() })); // Base64 encoded mock token
+      localStorage.setItem('jwtToken', mockJwtToken);
+      console.log('Token saved to localStorage:', mockJwtToken);
+      // navigate("/dashboard");
+
     }
   };
 
