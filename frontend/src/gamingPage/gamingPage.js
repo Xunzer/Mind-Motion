@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -24,10 +25,20 @@ import "./css/gamingPage.css";
 
 const GamingPage = () => {
   const drawerWidth = 240;
+  const navigate = useNavigate(); // For navigating back
 
   const theme = createTheme({
     palette: {
-      mode:  'dark' 
+      mode: 'dark',
+    },
+    components: {
+      MuiCssBaseline: {
+        styleOverrides: {
+          body: {
+            backgroundImage: `linear-gradient(135deg, #0a1e3a 50%, #152a45 50%)`,
+          },
+        },
+      },
     },
   });
 
@@ -55,13 +66,14 @@ const GamingPage = () => {
 
   };
 
-  const returnMainPage = () => {
-
+  const returnDashboard = () => {
+    navigate(-1);
   };
 
   return (
+    <section className="gaming-page-container">
     <ThemeProvider theme={theme}>
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex' }} >
       <CssBaseline />
       <AppBar
         position="fixed"
@@ -88,9 +100,9 @@ const GamingPage = () => {
         <Toolbar> 
         <DrawerHeader sx={{display: 'flex', flexDirection: "row"}}>
           <Box>
-            <Typography id='left_bar_drawer_title'>Go to main page?</Typography>
+            <Typography id='left_bar_drawer_title'>Go to dashboard</Typography>
           </Box>
-          <IconButton onClick={returnMainPage} sx={{marginLeft: "5px"}}>
+          <IconButton onClick={returnDashboard} sx={{marginLeft: "5px"}}>
             <ChevronLeftIcon />
           </IconButton>
         </DrawerHeader>
@@ -129,7 +141,7 @@ const GamingPage = () => {
       </Drawer>
       <Box
         component="main"
-        sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
+        sx={{ flexGrow: 1, p: 3 }}
       >
         <Toolbar />
         <Typography sx={{ marginBottom: 2, textAlign: 'center', fontWeight: 'bold' }}>
@@ -182,6 +194,7 @@ const GamingPage = () => {
       </Drawer>
     </Box>
     </ThemeProvider>
+    </section>
   );
 }
 
