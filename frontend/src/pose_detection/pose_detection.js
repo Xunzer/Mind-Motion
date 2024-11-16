@@ -8,6 +8,10 @@ const PoseDetection = () => {
   const poseRef = useRef(null);
   let stage = "";
   let counter = 0;
+  let minAngle = 45;
+  let score = 0;
+  let totalScore = 0;
+  let notAdded = false;
 
   // Memoize the onResults function to avoid re-creating it unnecessarily
   const onResults = useCallback((results) => {
@@ -84,7 +88,10 @@ const PoseDetection = () => {
       return;
     }
     if (counter >= 10){
+      console.log("Total Score: " + totalScore);
       console.log("You finished this exercise, move to the next one!")
+      const avgScore = totalScore / counter;
+      console.log("Average Score: " + avgScore);
       return;
     }
     const rightBicepCurlAngle = calculateAngle(
@@ -92,24 +99,14 @@ const PoseDetection = () => {
       landmarks[pose.POSE_LANDMARKS.RIGHT_ELBOW],
       landmarks[pose.POSE_LANDMARKS.RIGHT_WRIST]
     );
-    console.log("Right Bicep Curl Angle: " + rightBicepCurlAngle);
-    if (rightBicepCurlAngle >= 100 && rightBicepCurlAngle < 115) {
-      stage = "down"
-    } else if (rightBicepCurlAngle <= 40 && stage === "down") {
-      stage = "up"
-      counter = counter + 1
-      console.log("good move! ")
-    } else if (rightBicepCurlAngle > 40 && rightBicepCurlAngle < 100 && stage === "down" ){
-      console.log("curl more")
-    }
-    console.log("counter = " + counter);
+    calculateScore(rightBicepCurlAngle);
 
     // Draw the angles on the canvas
     ctx.font = '20px Arial';
     ctx.fillStyle = 'green';
     ctx.fillText(`Right Arm Angle: ${Math.round(rightBicepCurlAngle)}`, 50, 50);
   };
-
+  
   const leftBicepCurl = (landmarks, ctx) => {
     if (!landmarks) {
       return;
@@ -123,23 +120,46 @@ const PoseDetection = () => {
       console.log("You finished this exercise, move to the next one!")
       return;
     }
-    console.log("Right Bicep Curl Angle: " + leftBicepCurlAngle);
-    if (leftBicepCurlAngle >= 100 && leftBicepCurlAngle < 115) {
-      stage = "down"
-    } else if (leftBicepCurlAngle <= 40 && stage === "down") {
-      stage = "up"
-      counter = counter + 1
-      console.log("good move! ")
-    } else if (leftBicepCurlAngle > 40 && leftBicepCurlAngle < 100 && stage === "down" ){
-      console.log("curl more")
-    }
-    console.log("counter = " + counter);
+    calculateAngle(leftBicepCurlAngle);
 
     // Draw the angles on the canvas
     ctx.font = '16px Arial';
     ctx.fillStyle = 'green';
     ctx.fillText(`Left Arm Angle: ${Math.round(leftBicepCurlAngle)}`, 50, 100);
   };
+
+  const calculateScore = (angle) => {
+    // Calculate score based on reaching back to the down position
+    if (angle >= 100 && angle < 115) {
+      stage = "down";
+      minAngle = 40;
+      notAdded = true;
+    } else if (angle <= 40 && stage === "down") {
+      stage = "up";
+    } else if (angle <= 40 && stage === "up") {
+      if (angle < minAngle) {
+        minAngle = angle;
+        console.log("Min Angle: " + minAngle);
+        if (minAngle < 20) {
+          score = 10;
+        } else {
+          score = 5 + ((40 - minAngle) / 25) * 5;
+          score = Math.round(score * 10) / 10; // Round to one decimal place for better precision
+        }
+        console.log("Score for this rep: " + score);
+      } else {
+        if (notAdded) {
+          totalScore += score;
+          counter += 1;
+          notAdded = false;
+          console.log("Total Score: " + totalScore);
+        }
+      }
+    } else if (angle > 40 && angle < 100 && stage === "down" ){
+      console.log("curl more")
+    }
+    console.log("counter = " + counter);
+  }
 
   const rightKneeExtension = (landmarks, ctx) => {
     if (!landmarks) {
@@ -218,23 +238,30 @@ const PoseDetection = () => {
     const hip = landmarks[pose.POSE_LANDMARKS.RIGHT_HIP];
     const wrist = landmarks[pose.POSE_LANDMARKS.RIGHT_WRIST];
 
+    if (counter >= 10){
+      console.log("You finished this exercise, move to the next one!")
+      return;
+    }
+
     if (!isElbowPinned(elbow, hip)){
       console.log("Keep your elbow pinned to your side.");
       return;
     }
 
-    if ( wrist.x - elbow.x < -0.18 && stage === "in") {
+    const wristDistance = wrist.x - elbow.x;
+    if ( wristDistance < -0.18 && stage === "in") {
       stage = "out";
       console.log("stage = " + stage)
       counter = counter + 1;
-    } else if (Math.abs(wrist.x - elbow.x) < 0.05 && stage === "out") {
+    } else if (Math.abs(wristDistance) < 0.05 && stage === "out") {
       console.log("Forearm is moving outward.");
       stage = "in";
       console.log("stage = " + stage)
-    } else if (Math.abs(wrist.x - elbow.x) < 0.05){
+    } else if (Math.abs(wristDistance) < 0.05){
       stage = "in";
       console.log("stage = " + stage)
     };
+
     console.log("counter = " + counter);
     ctx.font = '16px Arial';
     ctx.fillStyle = 'green';
@@ -247,11 +274,11 @@ const PoseDetection = () => {
       Math.pow(point2.y - point1.y, 2)
     );
   };
+  
   const isElbowPinned = (elbow, hip) => {
     const distance = calculateDistance(elbow, hip);
     return distance < 0.4; // Adjust the threshold based on calibration
   };
-  
 
   // Function to calculate angle between three points
   const calculateAngle = (pointA, pointB, pointC) => {
