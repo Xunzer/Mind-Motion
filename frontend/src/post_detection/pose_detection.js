@@ -17,7 +17,7 @@ const PoseDetection = () => {
 
     if (results.poseLandmarks) {
       drawStickFigure(results.poseLandmarks, canvasCtx);
-      rightBicepCurl(results.poseLandmarks, canvasCtx);
+      openArms(results.poseLandmarks, canvasCtx);
     }
   }, []);
 
@@ -141,6 +141,115 @@ const PoseDetection = () => {
     ctx.fillText(`Left Arm Angle: ${Math.round(leftBicepCurlAngle)}`, 50, 100);
   };
 
+  const rightKneeExtension = (landmarks, ctx) => {
+    if (!landmarks) {
+      return;
+    }
+    if (counter >= 10){
+      console.log("You finished this exercise, move to the next one!")
+      return;
+    }
+    const rightKneeExtensionAngle = calculateAngle(
+      landmarks[pose.POSE_LANDMARKS.RIGHT_HIP],
+      landmarks[26],
+      landmarks[28]
+    );
+    console.log("Right Bicep Curl Angle: " + rightKneeExtensionAngle);
+    if (rightKneeExtensionAngle <= 100) {
+      stage = "down"
+    } else if (rightKneeExtensionAngle >= 140 && stage === "down") {
+      stage = "up"
+      counter = counter + 1
+      console.log("good move! ")
+    } else if (rightKneeExtensionAngle < 140 && rightKneeExtensionAngle > 100 && stage === "down" ){
+      console.log("extend more")
+    } else if (rightKneeExtensionAngle < 140 && rightKneeExtensionAngle > 100 && stage === "up"){
+      console.log("retrive to the initial position")
+    }
+    console.log("counter = " + counter);
+
+    // Draw the angles on the canvas
+    ctx.font = '20px Arial';
+    ctx.fillStyle = 'green';
+    ctx.fillText(`right Knee Angle: ${Math.round(rightKneeExtensionAngle)}`, 50, 50);
+  };
+
+  const leftKneeExtension = (landmarks, ctx) => {
+    if (!landmarks) {
+      return;
+    }
+    if (counter >= 10) {
+      console.log("You finished this exercise, move to the next one!");
+      return;
+    }
+    const leftKneeExtensionAngle = calculateAngle(
+      landmarks[pose.POSE_LANDMARKS.LEFT_HIP], // Left Hip (index 23)
+      landmarks[25],                           // Left Knee (index 25)
+      landmarks[27]                            // Left Ankle (index 27)
+    );
+    console.log("Left Knee Extension Angle: " + leftKneeExtensionAngle);
+  
+    if (leftKneeExtensionAngle <= 100) {
+      stage = "down";
+    } else if (leftKneeExtensionAngle >= 140 && stage === "down") {
+      stage = "up";
+      counter = counter + 1;
+      console.log("Good move!");
+    } else if (
+      leftKneeExtensionAngle < 140 &&
+      leftKneeExtensionAngle > 100 &&
+      stage === "down"
+    ) {
+      console.log("Extend more");
+    }
+   else if (leftKneeExtensionAngle < 140 && leftKneeExtensionAngle > 100 && stage === "up"){
+    console.log("retrive to the initial position")
+  }
+    console.log("Counter = " + counter);
+  
+    // Draw the angles on the canvas
+    ctx.font = "20px Arial";
+    ctx.fillStyle = "green";
+    ctx.fillText(`Left Knee Angle: ${Math.round(leftKneeExtensionAngle)}`, 50, 80);
+  };
+
+  const openArms = (landmarks, ctx) => {
+    const elbow = landmarks[pose.POSE_LANDMARKS.RIGHT_ELBOW];
+    const hip = landmarks[pose.POSE_LANDMARKS.RIGHT_HIP];
+    const wrist = landmarks[pose.POSE_LANDMARKS.RIGHT_WRIST];
+
+    if (!isElbowPinned(elbow, hip)){
+      console.log("Keep your elbow pinned to your side.");
+    }
+    else{
+      stage = "in"
+    }
+
+    if ( wrist.x - elbow.x < -0.2 && stage === "in") {
+      console.log("Forearm returned to center.");
+      stage = "out";
+      counter = counter + 1;
+    } else if (Math.abs(wrist.x, elbow.x) < 0.04 && stage === "out") {
+      console.log("Forearm is moving outward.");
+      stage = "in";
+    };
+    console.log("counter = " + counter);
+    ctx.font = '16px Arial';
+    ctx.fillStyle = 'green';
+    ctx.fillText(`wrist - elbow x: ${(wrist.x-elbow.x)}`, 30, 100);
+  };
+
+  const calculateDistance = (point1, point2) => {
+    return Math.sqrt(
+      Math.pow(point2.x - point1.x, 2) +
+      Math.pow(point2.y - point1.y, 2)
+    );
+  };
+  const isElbowPinned = (elbow, hip) => {
+    const distance = calculateDistance(elbow, hip);
+    return distance < 0.4; // Adjust the threshold based on calibration
+  };
+  
 
   // Function to calculate angle between three points
   const calculateAngle = (pointA, pointB, pointC) => {
@@ -164,7 +273,7 @@ const PoseDetection = () => {
         <h2>Live Camera Feed</h2>
         <video
           ref={videoRef}
-          style={{ width: '640px', height: '480px', border: '1px solid black' }}
+          style={{ width: '200px', height: '480px', border: '1px solid black' }}
           autoPlay
           muted
         ></video>
