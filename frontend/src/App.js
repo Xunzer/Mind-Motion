@@ -1,13 +1,24 @@
+import logo from './logo.svg';
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import GamingPage from './gamingPage/gamingPage';
+import SignUpPage from "./signUpPage/signUpPage"
+import IntroPage from "./introPage/introPage"
+// import ProfilePage from "./ProfilePage"
+// import DashboardLayoutBasic from './dashboard';
+import './App.css';
 
-// import GamingPage from './gamingPage/gamingPage';
-import Sign_Up_Page from "./signUpPage/signUpPage"
-import Intro_page from "./introPage/introPage"
+
+
 const App = () => {
   return (
-    <div >
-      <Intro_page/>
-      <Sign_Up_Page/>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/stage" element={<GamingPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/intro" element={<IntroPage />} />
+        
+      </Routes>
+    </Router>
   );
 };
 
