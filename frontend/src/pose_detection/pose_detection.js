@@ -12,6 +12,10 @@ const PoseDetection = () => {
   let score = 0;
   let totalScore = 0;
   let notAdded = false;
+  let angleHistory = [];
+  let ideal_rom = 0;
+  let rom_score = 0;
+  let repComplete = false; // Flag to track if rep is completed
 
   // Memoize the onResults function to avoid re-creating it unnecessarily
   const onResults = useCallback((results) => {
@@ -21,7 +25,7 @@ const PoseDetection = () => {
 
     if (results.poseLandmarks) {
       drawStickFigure(results.poseLandmarks, canvasCtx);
-      leftKneeExtension(results.poseLandmarks, canvasCtx); // change to knee extension
+      leftKneeExtension(results.poseLandmarks, canvasCtx); // change function to test
     }
   }, []);
 
@@ -33,7 +37,7 @@ const PoseDetection = () => {
     poseInstance.setOptions({
       modelComplexity: 1,
       smoothLandmarks: true,
-      minDetectionConfidence: 0.5,
+      minDetectionConfidence: 0.6, // keep as is.
       minTrackingConfidence: 0.5,
     });
 
@@ -99,7 +103,7 @@ const PoseDetection = () => {
       landmarks[pose.POSE_LANDMARKS.RIGHT_ELBOW],
       landmarks[pose.POSE_LANDMARKS.RIGHT_WRIST]
     );
-    calculateScore(rightBicepCurlAngle);
+    calculateBicepCurlScore(rightBicepCurlAngle);
 
     // Draw the angles on the canvas
     ctx.font = '20px Arial';
@@ -120,7 +124,7 @@ const PoseDetection = () => {
       console.log("You finished this exercise, move to the next one!")
       return;
     }
-    calculateAngle(leftBicepCurlAngle);
+    calculateBicepCurlScore(leftBicepCurlAngle); 
 
     // Draw the angles on the canvas
     ctx.font = '16px Arial';
@@ -128,7 +132,7 @@ const PoseDetection = () => {
     ctx.fillText(`Left Arm Angle: ${Math.round(leftBicepCurlAngle)}`, 50, 100);
   };
 
-  const calculateScore = (angle) => {
+  const calculateBicepCurlScore = (angle) => {
     // Calculate score based on reaching back to the down position
     if (angle >= 100 && angle < 115) {
       stage = "down";
@@ -169,23 +173,25 @@ const PoseDetection = () => {
       console.log("You finished this exercise, move to the next one!")
       return;
     }
-    const rightKneeExtensionAngle = calculateAngle(
+    const rightKneeExtensionAngle = smoothedAngle(calculateAngle(
       landmarks[pose.POSE_LANDMARKS.RIGHT_HIP],
-      landmarks[26],
-      landmarks[28]
-    );
-    console.log("Right Bicep Curl Angle: " + rightKneeExtensionAngle);
-    if (rightKneeExtensionAngle <= 100) {
-      stage = "down"
-    } else if (rightKneeExtensionAngle >= 140 && stage === "down") {
-      stage = "up"
-      counter = counter + 1
-      console.log("good move! ")
-    } else if (rightKneeExtensionAngle < 140 && rightKneeExtensionAngle > 100 && stage === "down" ){
-      console.log("extend more")
-    } else if (rightKneeExtensionAngle < 140 && rightKneeExtensionAngle > 100 && stage === "up"){
-      console.log("retrive to the initial position")
-    }
+      landmarks[pose.POSE_LANDMARKS.RIGHT_KNEE],
+      landmarks[pose.POSE_LANDMARKS.RIGHT_ANKLE]
+    ));
+    console.log("Right knee extension Angle: " + rightKneeExtensionAngle);
+    calculateKneeExtensionScore(rightKneeExtensionAngle)
+    // if (rightKneeExtensionAngle <= 110) {
+    //     stage = "down"
+    // } else if (rightKneeExtensionAngle >= 130 && stage === "down") {
+    //     stage = "up"
+    //     counter = counter + 1
+    //     console.log("good move! ")
+
+    // } else if (rightKneeExtensionAngle < 130 && rightKneeExtensionAngle > 110 && stage === "down" ){
+    //   console.log("extend more")
+    // } else if (rightKneeExtensionAngle < 130 && rightKneeExtensionAngle > 110 && stage === "up"){
+    //   console.log("returned to the initial position")
+    // }
     console.log("counter = " + counter);
 
     // Draw the angles on the canvas
@@ -202,29 +208,29 @@ const PoseDetection = () => {
       console.log("You finished this exercise, move to the next one!");
       return;
     }
-    const leftKneeExtensionAngle = calculateAngle(
+    const leftKneeExtensionAngle = smoothedAngle(calculateAngle(
       landmarks[pose.POSE_LANDMARKS.LEFT_HIP], // Left Hip (index 23)
-      landmarks[25],                           // Left Knee (index 25)
-      landmarks[27]                            // Left Ankle (index 27)
-    );
+      landmarks[pose.POSE_LANDMARKS.LEFT_KNEE], // Left Knee (index 25)
+      landmarks[pose.POSE_LANDMARKS.LEFT_ANKLE]  // Left Ankle (index 27)
+    ));
     console.log("Left Knee Extension Angle: " + leftKneeExtensionAngle);
-  
-    if (leftKneeExtensionAngle <= 100) {
-      stage = "down";
-    } else if (leftKneeExtensionAngle >= 140 && stage === "down") {
-      stage = "up";
-      counter = counter + 1;
-      console.log("Good move!");
-    } else if (
-      leftKneeExtensionAngle < 140 &&
-      leftKneeExtensionAngle > 100 &&
-      stage === "down"
-    ) {
-      console.log("Extend more");
-    }
-   else if (leftKneeExtensionAngle < 140 && leftKneeExtensionAngle > 100 && stage === "up"){
-    console.log("retrive to the initial position")
-  }
+    calculateKneeExtensionScore(leftKneeExtensionAngle)
+  //   if (leftKneeExtensionAngle <= 110) {
+  //     stage = "down";
+  //   } else if (leftKneeExtensionAngle >= 130 && stage === "down") {
+  //     stage = "up";
+  //     counter = counter + 1;
+  //     console.log("Good move!");
+  //   } else if (
+  //     leftKneeExtensionAngle < 130 &&
+  //     leftKneeExtensionAngle > 110 &&
+  //     stage === "down"
+  //   ) {
+  //     console.log("Extend more");
+  //   }
+  //  else if (leftKneeExtensionAngle < 130 && leftKneeExtensionAngle > 110 && stage === "up"){
+  //   console.log("retrive to the initial position")
+  // }
     console.log("Counter = " + counter);
   
     // Draw the angles on the canvas
@@ -232,6 +238,43 @@ const PoseDetection = () => {
     ctx.fillStyle = "green";
     ctx.fillText(`Left Knee Angle: ${Math.round(leftKneeExtensionAngle)}`, 50, 80);
   };
+
+  const calculateKneeExtensionScore = (angle) => { // calculate score for knee extension exercise.
+    ideal_rom = 160 // ideal range of motion (rom) for this exercise is 160 degrees (rough estimation).
+    if (angle <= 110) {
+      stage = "down";
+    } else if (angle >= 130 && stage === "down") {
+      counter = counter + 1
+      stage = "up";
+      repComplete = true
+    } 
+    if (angle >= 130 && stage === "up" && repComplete) {
+      console.log("ROM Score:", Math.round((angle / ideal_rom) * 100));
+      // rom score = ((actual rom) / (ideal rom)) * 100
+      // based on this rom score we'll allocate points.
+      rom_score = Math.round((angle / ideal_rom) * 100)
+      if (rom_score >= 95){
+        totalScore += 20
+      } else if (rom_score >= 90){
+        totalScore += 15
+      } else if (rom_score >= 85){
+        totalScore += 10
+      } else { 
+        totalScore += 7
+      }
+      repComplete = false
+      console.log("counter = " + counter);
+      console.log("rom_score for this rep = " + rom_score);
+      console.log("current score = " + totalScore);
+    } 
+    console.log("counter = " + counter);
+    console.log("current score = " + totalScore);
+  }
+
+
+
+
+
 
   const openArms = (landmarks, ctx) => {
     const shoulder = landmarks[pose.POSE_LANDMARKS.RIGHT_SHOULDER];
@@ -279,6 +322,21 @@ const PoseDetection = () => {
     const distance = calculateDistance(elbow, hip);
     return distance < 0.4; // Adjust the threshold based on calibration
   };
+
+  // Reduce the inherent noise of erratic movements
+  const smoothedAngle = (newAngle) => {
+    angleHistory.push(newAngle);
+    if (angleHistory.length > 5) {
+      angleHistory.shift(); // Keep the last 5 angles
+    }
+    return angleHistory.reduce((sum, angle) => sum + angle, 0) / angleHistory.length; // Take the average of the last 5 recorded angles and return it
+  };
+
+
+
+
+
+
 
   // Function to calculate angle between three points
   const calculateAngle = (pointA, pointB, pointC) => {
