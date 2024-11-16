@@ -8,6 +8,10 @@ const PoseDetection = () => {
   const poseRef = useRef(null);
   let stage = "";
   let counter = 0;
+  let minAngle = 45;
+  let score = 0;
+  let totalScore = 0;
+  let notAdded = false;
 
   // Memoize the onResults function to avoid re-creating it unnecessarily
   const onResults = useCallback((results) => {
@@ -83,7 +87,8 @@ const PoseDetection = () => {
     if (!landmarks) {
       return;
     }
-    if (counter >= 10){
+    if (counter >= 3){
+      console.log("Total Score: " + totalScore);
       console.log("You finished this exercise, move to the next one!")
       return;
     }
@@ -92,16 +97,36 @@ const PoseDetection = () => {
       landmarks[pose.POSE_LANDMARKS.RIGHT_ELBOW],
       landmarks[pose.POSE_LANDMARKS.RIGHT_WRIST]
     );
-    console.log("Right Bicep Curl Angle: " + rightBicepCurlAngle);
+    // Calculate score based on reaching back to the down position
     if (rightBicepCurlAngle >= 100 && rightBicepCurlAngle < 115) {
-      stage = "down"
-    } else if (rightBicepCurlAngle <= 40 && stage === "down") {
-      stage = "up"
-      counter = counter + 1
-      console.log("good move! ")
+      stage = "down";
+      minAngle = 45;
+      notAdded = true;
+    } else if (rightBicepCurlAngle <= 45 && stage === "down") {
+      stage = "up";
+    } else if (rightBicepCurlAngle <= 45 && stage === "up") {
+      if (rightBicepCurlAngle < minAngle) {
+        minAngle = rightBicepCurlAngle;
+        console.log("Min Angle: " + minAngle);
+        if (minAngle < 20) {
+          score = 10;
+        } else {
+          score = 5 + ((45 - minAngle) / 25) * 5;
+          score = Math.round(score * 10) / 10; // Round to one decimal place for better precision
+        }
+        console.log("Score for this rep: " + score);
+      } else {
+        if (notAdded) {
+          totalScore += score;
+          counter += 1;
+          notAdded = false;
+          console.log("Total Score: " + totalScore);
+        }
+      }
     } else if (rightBicepCurlAngle > 40 && rightBicepCurlAngle < 100 && stage === "down" ){
       console.log("curl more")
     }
+
     console.log("counter = " + counter);
 
     // Draw the angles on the canvas
@@ -109,7 +134,7 @@ const PoseDetection = () => {
     ctx.fillStyle = 'green';
     ctx.fillText(`Right Arm Angle: ${Math.round(rightBicepCurlAngle)}`, 50, 50);
   };
-
+  
   const leftBicepCurl = (landmarks, ctx) => {
     if (!landmarks) {
       return;
