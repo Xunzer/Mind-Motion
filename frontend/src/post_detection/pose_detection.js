@@ -220,18 +220,20 @@ const PoseDetection = () => {
 
     if (!isElbowPinned(elbow, hip)){
       console.log("Keep your elbow pinned to your side.");
-    }
-    else{
-      stage = "in"
+      return;
     }
 
-    if ( wrist.x - elbow.x < -0.2 && stage === "in") {
-      console.log("Forearm returned to center.");
+    if ( wrist.x - elbow.x < -0.18 && stage === "in") {
       stage = "out";
+      console.log("stage = " + stage)
       counter = counter + 1;
-    } else if (Math.abs(wrist.x, elbow.x) < 0.04 && stage === "out") {
+    } else if (Math.abs(wrist.x - elbow.x) < 0.05 && stage === "out") {
       console.log("Forearm is moving outward.");
       stage = "in";
+      console.log("stage = " + stage)
+    } else if (Math.abs(wrist.x - elbow.x) < 0.05){
+      stage = "in";
+      console.log("stage = " + stage)
     };
     console.log("counter = " + counter);
     ctx.font = '16px Arial';
