@@ -11,9 +11,10 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import { styled } from '@mui/material/styles';
-
+import { useNavigate } from 'react-router-dom';
 import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
+import { useMemo } from 'react';
 
 import FormControlLabel from '@mui/material/FormControlLabel';
 
@@ -42,7 +43,7 @@ export default function SignUpCard({signUpToSignInTransition}) {
   const [confirmPasswordError, setConfirmPasswordError] = React.useState(false);
   const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] =
     React.useState('');
-
+  const navigate = useNavigate();
   const validateInputs = () => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
@@ -84,10 +85,24 @@ export default function SignUpCard({signUpToSignInTransition}) {
     event.preventDefault();
     if (validateInputs()) {
       const formData = new FormData(event.currentTarget);
-      console.log({
-        email: formData.get('email'),
-        password: formData.get('password'),
-      });
+      const email = formData.get('email');
+      const password = formData.get('password');
+  
+      // Check if the email already exists in localStorage
+      const existingUserData = JSON.parse(localStorage.getItem('userData'));
+  
+      if (existingUserData && existingUserData.email === email) {
+        alert('An account with this email already exists.');
+        return;
+      }
+  
+      // Save user data to localStorage (replace JWT logic as needed)
+      const userData = { email, password }; // Be cautious about storing passwords
+      localStorage.setItem('userData', JSON.stringify(userData));
+      console.log('User data saved:', userData);
+  
+      // Navigate to dashboard or next page
+      navigate("/dashboard");
     }
   };
 
@@ -183,10 +198,7 @@ export default function SignUpCard({signUpToSignInTransition}) {
             fullWidth
           />
         </FormControl>
-        <FormControlLabel
-          control={<Checkbox name="terms" />}
-          label="I agree to the terms and conditions"
-        />
+
         <Button type="submit" variant="contained" fullWidth>
           Sign up
         </Button>

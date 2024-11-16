@@ -10,8 +10,9 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-
+import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
+import  { useMemo } from 'react';
 
 import ForgotPassword from './ForgotPassword';
 
@@ -47,7 +48,7 @@ export default function SignInCard({ signInToSignUpTransition }) {
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [open, setOpen] = React.useState(false);
-
+  const navigate = useNavigate();
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -90,6 +91,35 @@ export default function SignInCard({ signInToSignUpTransition }) {
     } else {
       setPasswordError(false);
       setPasswordErrorMessage('');
+    }
+    // TODO Check if account exists
+    const savedCredentials = JSON.parse(localStorage.getItem('userData')); // Get the stored user data
+    if (savedCredentials) {
+      console.log("Checking saved credentials:", savedCredentials);
+    
+      // Compare the input email and password with the stored credentials
+      if (email.value !== savedCredentials.email || password.value !== savedCredentials.password) {
+        setEmailError(true);
+        setPasswordError(true);
+        setEmailErrorMessage('Invalid email or password. Please register if you don\'t have an account.');
+        setPasswordErrorMessage('Invalid email or password. Please register if you don\'t have an account.');
+        isValid = false;
+      } else {
+        isValid = true;
+      }
+    } else {
+      // No stored credentials found
+      setEmailError(true);
+      setPasswordError(true);
+      setEmailErrorMessage('No account found. Please sign up.');
+      setPasswordErrorMessage('No account found. Please sign up.');
+    }
+    
+    if (isValid) {
+      console.log("You made it!");
+      navigate("/dashboard")
+    } else {
+      console.log("You failed.");
     }
 
     return isValid;
@@ -164,7 +194,7 @@ export default function SignInCard({ signInToSignUpTransition }) {
           label="Remember me"
         />
         <ForgotPassword open={open} handleClose={handleClose} />
-        <Button type="submit" fullWidth variant="contained" onClick={validateInputs}>
+        <Button type="submit" fullWidth variant="contained" onClick={()=>{if (validateInputs() == true){console.log("good you in login")}}}>
           Sign in
         </Button>
         <Typography sx={{ textAlign: 'center' }} onClick={signInToSignUpTransition}>

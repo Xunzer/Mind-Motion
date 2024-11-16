@@ -12,7 +12,7 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import Fade from '@mui/material/Fade';
 import Slide from '@mui/material/Slide';
 
-export default function SignUpPage(props) {
+export default function SignUpPage({parent_button}) {
   //* Default setup
   const [darkMode, setDarkMode] = useState(false);
   const theme = createTheme({
@@ -37,6 +37,16 @@ export default function SignUpPage(props) {
 
 
   const [time, setTime] = useState(950)
+
+  //! important stuff : false means signup
+  if (parent_button == false){
+    setSignInAnimation(false)
+    setContentAnimation(false)
+    setSignUpAnimation(true)
+  }
+
+
+
   const signInToSignUpTransition = () => {
     setTime(400)
     setSignInDirection("right")

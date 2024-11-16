@@ -5,7 +5,7 @@ body {
   
   .motion-and-mind {
     position: relative;
-    background: linear-gradient(135deg, #0a1e3a 50%, #152a45 50%);
+    background: linear-gradient(315deg, #0a1e3a 50%, #495e7a 50%);
     min-height: 100vh;
     color: #ffffff;
     padding: 20px;
@@ -123,5 +123,34 @@ body {
   .cta-button:hover {
     background-color: #42a5f5;
     box-shadow: 0px 10px 20px rgba(100, 181, 246, 1);
+  }
+  
+
+  .header-logo {
+    width: 400px;
+    height: auto;
+    margin-bottom: 20px; 
+    border: 3px solid #64b5f6; 
+    border-radius: 12px; 
+    box-shadow: 0px 8px 20px rgba(100, 181, 246, 0.6); 
+    background-color: rgba(255, 255, 255, 0.015); 
+    padding: 10px; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .header-logo img {
+    width: 100%; 
+    height: auto;
+    opacity: 0.8;
+    transition: opacity 0.3s ease; 
+  }
+  
+  .header-logo:hover {
+    transform: scale(1.2); 
+    box-shadow: 0px 12px 25px rgba(100, 181, 246, 1); 
+  }
+  
+  .header-logo:hover img {
+    opacity: 1; 
   }
   

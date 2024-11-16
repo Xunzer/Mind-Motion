@@ -1,30 +1,47 @@
 import React from 'react';
 import './css/introPage.css';
+import logo from '../assets/image.png'; // Update to match the actual file name
 import { Box, Typography, Button } from '@mui/material';
 import { FitnessCenter, Timeline, EmojiEvents, TrackChanges } from '@mui/icons-material';
+import { useNavigate } from "react-router-dom";
 
 const IntroPage = () => {
+  const navigate = useNavigate();
+
+  const navigateToSignIn = () => {
+    navigate("/signup");
+  };
+
+  const navigateToSignUp = () => {
+    console.log('Navigating to Sign Up...');
+    navigate("/signin");
+  };
+
   return (
     <div className="motion-and-mind">
-      {/* Decorative Background Blurs */}
       <div className="background-blur-top"></div>
       <div className="background-blur-bottom"></div>
 
-      {/* Top-Right Buttons */}
       <div className="top-right-buttons">
-        <Button variant="outlined" sx={{ color: '#64b5f6', borderColor: '#64b5f6' }}>
+        <Button
+          variant="outlined"
+          sx={{ color: '#64b5f6', borderColor: '#64b5f6' }}
+          onClick={() => navigateToSignIn()}
+        >
           Sign In
         </Button>
-        <Button variant="contained" sx={{ backgroundColor: '#64b5f6', color: '#000' }}>
+        <Button
+          variant="contained"
+          sx={{ backgroundColor: '#64b5f6', color: '#000' }}
+          onClick={() => navigateToSignUp()}
+        >
           Sign Up
         </Button>
       </div>
 
       {/* Header Section */}
       <div className="header">
-        <Typography variant="h2" className="header-title" fontWeight="bold">
-          Motion & Mind
-        </Typography>
+        <img src={logo} alt="Mind & Motion Logo" className="header-logo" />
         <Typography variant="h5" className="header-subtitle">
           Empowering stroke recovery through technology.
         </Typography>
@@ -75,7 +92,30 @@ const IntroPage = () => {
         <Typography variant="h5" className="call-to-action-title" fontWeight="bold">
           Ready to start your recovery journey?
         </Typography>
-        <Button className="cta-button">Get Started</Button>
+        <Button
+          className="cta-button"
+          sx={{
+            mt: 4, // Move down
+            px: 6, // Wider button
+            py: 2, // Increased height
+            backgroundColor: 'transparent', // Transparent background
+            color: '#64b5f6', // Match the theme color for text
+            fontSize: '1.2rem', // Adjust font size
+            fontWeight: 'bold',
+            textTransform: 'none', // Disable uppercase transformation
+            border: '2px solid #64b5f6', // Add a border for better visibility
+            borderRadius: '8px', // Rounded corners
+            boxShadow: 'none',
+            transition: 'all 0.3s ease', // Smooth hover animation
+            '&:hover': {
+              backgroundColor: 'rgba(100, 181, 246, 0.1)', // Slightly filled on hover
+              boxShadow: '0px 0px 20px 4px rgba(100, 181, 246, 0.8)', // Glowing effect
+            },
+          }}
+        >
+          Get Started
+        </Button>
+
       </div>
     </div>
   );
