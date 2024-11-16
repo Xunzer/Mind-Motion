@@ -12,7 +12,7 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import Fade from '@mui/material/Fade';
 import Slide from '@mui/material/Slide';
 
-export default function SignInSide(props) {
+export default function SignUpPage(props) {
   //* Default setup
   const [darkMode, setDarkMode] = useState(false);
   const theme = createTheme({

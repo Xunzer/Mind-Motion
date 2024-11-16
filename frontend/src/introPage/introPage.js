@@ -1,9 +1,9 @@
 import React from 'react';
-import './MotionAndMind.css';
+import './css/introPage.css';
 import { Box, Typography, Button } from '@mui/material';
 import { FitnessCenter, Timeline, EmojiEvents, TrackChanges } from '@mui/icons-material';
 
-const MotionAndMind = () => {
+const IntroPage = () => {
   return (
     <div className="motion-and-mind">
       {/* Decorative Background Blurs */}
@@ -81,4 +81,4 @@ const MotionAndMind = () => {
   );
 };
 
-export default MotionAndMind;
+export default IntroPage;
