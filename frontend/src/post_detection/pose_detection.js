@@ -218,21 +218,22 @@ const PoseDetection = () => {
     const hip = landmarks[pose.POSE_LANDMARKS.RIGHT_HIP];
     const wrist = landmarks[pose.POSE_LANDMARKS.RIGHT_WRIST];
 
-    // if (!isElbowPinned(elbow, hip)){
-    //   console.log("Keep your elbow pinned to your side.");
-    // }
-    // else{
-    //   stage = "in"
-    // }
+    if (!isElbowPinned(elbow, hip)){
+      console.log("Keep your elbow pinned to your side.");
+      return;
+    }
 
-    if ( wrist.x - shoulder.x > -0.21) {
-      console.log("Forearm extended from the center.");
+    if ( wrist.x - elbow.x < -0.18 && stage === "in") {
       stage = "out";
-      
-    } else if ((wrist.x - shoulder.x) < -0.02 && (wrist.x - shoulder.x) > -0.08 && stage === "out") {
+      console.log("stage = " + stage)
+      counter = counter + 1;
+    } else if (Math.abs(wrist.x - elbow.x) < 0.05 && stage === "out") {
       console.log("Forearm is moving outward.");
       stage = "in";
-      counter = counter + 1;
+      console.log("stage = " + stage)
+    } else if (Math.abs(wrist.x - elbow.x) < 0.05){
+      stage = "in";
+      console.log("stage = " + stage)
     };
     console.log("counter = " + counter);
     ctx.font = '16px Arial';
