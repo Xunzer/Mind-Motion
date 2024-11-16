@@ -6,7 +6,6 @@ function App() {
   return (
     <div >
       <Intro_page/>
-      <Sign_Up_Page/>
     </div>
   );
 }
