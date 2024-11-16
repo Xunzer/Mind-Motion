@@ -8,11 +8,14 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-
+import { useLocation } from 'react-router-dom';
 import Fade from '@mui/material/Fade';
 import Slide from '@mui/material/Slide';
 
-export default function SignUpPage({parent_button}) {
+export default function SignUpPage() {
+  const location = useLocation();
+  let parent_button = location.state?.parent_button || true; // Default to `false` if undefined
+  console.log("parnet button ", parent_button);
   //* Default setup
   const [darkMode, setDarkMode] = useState(false);
   const theme = createTheme({

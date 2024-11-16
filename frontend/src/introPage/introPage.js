@@ -7,14 +7,12 @@ import { useNavigate } from "react-router-dom";
 
 const IntroPage = () => {
   const navigate = useNavigate();
-
-  const navigateToSignIn = () => {
-    navigate("/signup");
+  const navigateToSignUp = () => {
+    navigate("/signup", { state: { parent_button: false } });
   };
 
-  const navigateToSignUp = () => {
-    console.log('Navigating to Sign Up...');
-    navigate("/signin");
+  const navigateToSignIn = () => {
+    navigate("/signin", { state: { parent_button: true } });
   };
 
   return (
