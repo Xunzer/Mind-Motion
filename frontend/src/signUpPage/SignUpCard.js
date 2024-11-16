@@ -85,18 +85,24 @@ export default function SignUpCard({signUpToSignInTransition}) {
     event.preventDefault();
     if (validateInputs()) {
       const formData = new FormData(event.currentTarget);
-      console.log({
-        email: formData.get('email'),
-        password: formData.get('password'),
-      });
-      let email = formData.get('email')
-      let password = formData.get('password')
-      //TODO if valid, then save to local storage (jwt)
-      const mockJwtToken = btoa(JSON.stringify({ email, password, timestamp: Date.now() })); // Base64 encoded mock token
-      localStorage.setItem('jwtToken', mockJwtToken);
-      console.log('Token saved to localStorage:', mockJwtToken);
-      // navigate("/dashboard");
-
+      const email = formData.get('email');
+      const password = formData.get('password');
+  
+      // Check if the email already exists in localStorage
+      const existingUserData = JSON.parse(localStorage.getItem('userData'));
+  
+      if (existingUserData && existingUserData.email === email) {
+        alert('An account with this email already exists.');
+        return;
+      }
+  
+      // Save user data to localStorage (replace JWT logic as needed)
+      const userData = { email, password }; // Be cautious about storing passwords
+      localStorage.setItem('userData', JSON.stringify(userData));
+      console.log('User data saved:', userData);
+  
+      // Navigate to dashboard or next page
+      navigate("/dashboard");
     }
   };
 

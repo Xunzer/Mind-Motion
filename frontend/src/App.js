@@ -15,7 +15,8 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/stage" element={<GamingPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/signup" element={<SignUpPage parent_button = {false}/>} />
+        <Route path="/signin" element={<SignUpPage parent_button = {true}/>} />
         <Route path="/intro" element={<IntroPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/dashboard" element={<DashboardLayoutBasic />} />

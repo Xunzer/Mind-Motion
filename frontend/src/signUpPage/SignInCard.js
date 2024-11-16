@@ -93,46 +93,33 @@ export default function SignInCard({ signInToSignUpTransition }) {
       setPasswordErrorMessage('');
     }
     // TODO Check if account exists
-    const savedToken = localStorage.getItem('jwtToken');
-    let savedCredentials = null;
-  
-    if (savedToken) {
-      try {
-        // Decode the JWT token (assuming it's Base64 encoded)
-        savedCredentials = JSON.parse(atob(savedToken));
-        console.log("saved cred  ", savedCredentials);
-      } catch (error) {
-        isValid = false
-        console.error('Error decoding token:', error);
-      }
-    }
-    console.log("here to check ", email.value !== savedCredentials.email || password.value !== savedCredentials.password);
-    console.log(email.value);
-    console.log(savedCredentials.email);
-    console.log(password.value);
-    console.log(savedCredentials.password);
+    const savedCredentials = JSON.parse(localStorage.getItem('userData')); // Get the stored user data
     if (savedCredentials) {
+      console.log("Checking saved credentials:", savedCredentials);
+    
+      // Compare the input email and password with the stored credentials
       if (email.value !== savedCredentials.email || password.value !== savedCredentials.password) {
         setEmailError(true);
         setPasswordError(true);
         setEmailErrorMessage('Invalid email or password. Please register if you don\'t have an account.');
         setPasswordErrorMessage('Invalid email or password. Please register if you don\'t have an account.');
         isValid = false;
-      }else{
+      } else {
         isValid = true;
       }
     } else {
+      // No stored credentials found
       setEmailError(true);
       setPasswordError(true);
       setEmailErrorMessage('No account found. Please sign up.');
       setPasswordErrorMessage('No account found. Please sign up.');
-      
     }
-
-    if (isValid){
-      console.log("you made it");
-    }else{
-      console.log("you failed");
+    
+    if (isValid) {
+      console.log("You made it!");
+      navigate("/dashboard")
+    } else {
+      console.log("You failed.");
     }
 
     return isValid;
