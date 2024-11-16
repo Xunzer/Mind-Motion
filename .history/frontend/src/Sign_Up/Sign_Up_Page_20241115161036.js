@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Stack from '@mui/material/Stack';
 import SignInCard from './SignInCard';
-import SignUpCard from './SignUpCard';
 import Content from './Content';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
@@ -15,60 +14,40 @@ import Slide from '@mui/material/Slide';
 export default function SignInSide(props) {
   //* Default setup
   const [darkMode, setDarkMode] = useState(false);
+  const [isPageVisible, setIsPageVisible] = useState(true); // Controls visibility for animation
+  const [animationDirection, setAnimationDirection] = useState('right'); // Animation direction for SignInCard
+  const [contentDirection, setContentDirection] = useState('left'); // Animation direction for Content
+  const [currentPage, setCurrentPage] = useState('home');
   const theme = createTheme({
     palette: {
-      mode:  'dark' 
+      mode: darkMode ? 'dark' : 'light',
     },
   });
 
   const toggleDarkMode = () => {
     setDarkMode((prevMode) => !prevMode);
   };
-
-  //* Animation
-  const [signInDirection, setSignInDirection] = useState("right")
-  const [contentDirection, setContentDirection] = useState("left")
-  const [signUpDirection, setSignUpDirection] = useState("right")
-
-
-  const [signInAnimation, setSignInAnimation] = useState(true)
-  const [contentAnimation, setContentAnimation] = useState(true)
-  const [signUpAnimation, setSignUpAnimation] = useState(false)
-
-
-  const [time, setTime] = useState(950)
-  const signInToSignUpTransition = () => {
-    setTime(400)
-    setSignInDirection("right")
-    setContentAnimation("left")
-    setSignInAnimation(false)
-    setContentAnimation(false)
-
+  const handlePageSwitch = () => {
+    // Trigger the animations to go in the opposite direction
+    setAnimationDirection('left'); // Slide out to the left
+    setContentDirection('right'); // Slide out to the right
+  
     setTimeout(() => {
-      setTime(950)
-      setSignUpAnimation(true)
-      
-    }, time); 
-    
-
+      setIsPageVisible(false); // Hide the current page
+  
+      // Wait for the current animation to finish before switching pages
+      setTimeout(() => {
+        setCurrentPage(currentPage === 'home' ? 'second' : 'home'); // Switch pages
+  
+        setAnimationDirection('right'); // Slide in from the right
+        setContentDirection('left'); // Slide in from the left
+  
+        setIsPageVisible(true); // Ensure the new page becomes visible
+      }, 300); // Short delay to switch pages
+    }, 1500); // Matches the Slide `timeout` duration
   };
-
-  const signUpToSignInTransition = () => {
-    setTime(400)
-    setSignUpAnimation("left")
-    setSignUpAnimation(false)
-
-    setTimeout(() => {
-      setTime(950)
-      setSignInDirection("right")
-      setContentAnimation("left")
-      setSignInAnimation(true)
-      setContentAnimation(true)
-      
-    }, time); 
-    
-
-  };
+  
+  
 
   return (
     <ThemeProvider theme={theme}>
@@ -117,7 +96,7 @@ export default function SignInSide(props) {
             mx: 'auto',
           }}
         >
-          
+          {isPageVisible && (
             <Stack
               direction={{ xs: 'column-reverse', md: 'row' }}
               sx={{
@@ -128,33 +107,20 @@ export default function SignInSide(props) {
               }}
             >
               <Slide
-                direction={signInDirection}
-                in={signInAnimation}
-                timeout={time}
+                direction={animationDirection}
+                in={isPageVisible}
+                timeout={1500}
                 mountOnEnter
                 unmountOnExit
               >
                 <div>
-                  <SignInCard signInToSignUpTransition = {signInToSignUpTransition}/>
+                  <SignInCard />
                 </div>
               </Slide>
-
-              <Slide
-                direction={signUpDirection}
-                in={signUpAnimation}
-                timeout={time}
-                mountOnEnter
-                unmountOnExit
-              >
-                <div>
-                  <SignUpCard signUpToSignInTransition={signUpToSignInTransition}/>
-                </div>
-              </Slide>
-
               <Slide
                 direction={contentDirection}
-                in={contentAnimation}
-                timeout={time}
+                in={isPageVisible}
+                timeout={1500}
                 mountOnEnter
                 unmountOnExit
               >
@@ -163,9 +129,17 @@ export default function SignInSide(props) {
                 </div>
               </Slide>
             </Stack>
-          
+          )}
         </Stack>
-
+        <Stack direction="row" justifyContent="center" sx={{ mt: 2 }}>
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={handlePageSwitch}
+          >
+            Switch Page
+          </IconButton>
+        </Stack>
       </Stack>
     </ThemeProvider>
   );

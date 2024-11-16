@@ -33,42 +33,24 @@ export default function SignInSide(props) {
 
   const [signInAnimation, setSignInAnimation] = useState(true)
   const [contentAnimation, setContentAnimation] = useState(true)
-  const [signUpAnimation, setSignUpAnimation] = useState(false)
+  const [signUpVisible, setSignUpVisible] = useState(false)
 
 
   const [time, setTime] = useState(950)
-  const signInToSignUpTransition = () => {
+  const handlePageSwitch = () => {
     setTime(400)
-    setSignInDirection("right")
-    setContentAnimation("left")
-    setSignInAnimation(false)
-    setContentAnimation(false)
-
+  
     setTimeout(() => {
-      setTime(950)
-      setSignUpAnimation(true)
-      
-    }, time); 
-    
-
-  };
-
-  const signUpToSignInTransition = () => {
-    setTime(400)
-    setSignUpAnimation("left")
-    setSignUpAnimation(false)
-
-    setTimeout(() => {
-      setTime(950)
       setSignInDirection("right")
-      setContentAnimation("left")
-      setSignInAnimation(true)
-      setContentAnimation(true)
+      setSignInAnimation(false)
       
+     
     }, time); 
-    
+    setSignUpVisible(true)
 
   };
+
+  
 
   return (
     <ThemeProvider theme={theme}>
@@ -135,21 +117,14 @@ export default function SignInSide(props) {
                 unmountOnExit
               >
                 <div>
-                  <SignInCard signInToSignUpTransition = {signInToSignUpTransition}/>
+                  <SignInCard />
                 </div>
               </Slide>
 
-              <Slide
-                direction={signUpDirection}
-                in={signUpAnimation}
-                timeout={time}
-                mountOnEnter
-                unmountOnExit
-              >
                 <div>
-                  <SignUpCard signUpToSignInTransition={signUpToSignInTransition}/>
+                {signUpVisible &&<SignUpCard />}
                 </div>
-              </Slide>
+         
 
               <Slide
                 direction={contentDirection}
@@ -165,7 +140,15 @@ export default function SignInSide(props) {
             </Stack>
           
         </Stack>
-
+        <Stack direction="row" justifyContent="center" sx={{ mt: 2 }}>
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={handlePageSwitch}
+          >
+            Switch Page
+          </IconButton>
+        </Stack>
       </Stack>
     </ThemeProvider>
   );

@@ -138,8 +138,7 @@ export default function SignInCard({ signInToSignUpTransition }) {
               type="button"
               onClick={handleClickOpen}
               variant="body2"
-              sx={{ alignSelf: 'baseline', cursor: 'pointer' }}
-    
+              sx={{ alignSelf: 'baseline' }}
             >
               Forgot your password?
             </Link>
@@ -173,7 +172,7 @@ export default function SignInCard({ signInToSignUpTransition }) {
             <Link
              
               variant="body2"
-              sx={{ alignSelf: 'center', cursor:"pointer" }}
+              sx={{ alignSelf: 'center' }}
             >
               Sign up
             </Link>

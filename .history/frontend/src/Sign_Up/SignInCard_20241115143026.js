@@ -41,7 +41,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
   }));
   
 
-export default function SignInCard({ signInToSignUpTransition }) {
+export default function SignInCard() {
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
@@ -123,7 +123,7 @@ export default function SignInCard({ signInToSignUpTransition }) {
             name="email"
             placeholder="your@email.com"
             autoComplete="email"
-            
+            autoFocus
             required
             fullWidth
             variant="outlined"
@@ -138,8 +138,7 @@ export default function SignInCard({ signInToSignUpTransition }) {
               type="button"
               onClick={handleClickOpen}
               variant="body2"
-              sx={{ alignSelf: 'baseline', cursor: 'pointer' }}
-    
+              sx={{ alignSelf: 'baseline' }}
             >
               Forgot your password?
             </Link>
@@ -152,7 +151,7 @@ export default function SignInCard({ signInToSignUpTransition }) {
             type="password"
             id="password"
             autoComplete="current-password"
-            
+            autoFocus
             required
             fullWidth
             variant="outlined"
@@ -167,13 +166,13 @@ export default function SignInCard({ signInToSignUpTransition }) {
         <Button type="submit" fullWidth variant="contained" onClick={validateInputs}>
           Sign in
         </Button>
-        <Typography sx={{ textAlign: 'center' }} onClick={signInToSignUpTransition}>
+        <Typography sx={{ textAlign: 'center' }}>
           Don&apos;t have an account?{' '}
           <span>
             <Link
-             
+              href="/material-ui/getting-started/templates/sign-in/"
               variant="body2"
-              sx={{ alignSelf: 'center', cursor:"pointer" }}
+              sx={{ alignSelf: 'center' }}
             >
               Sign up
             </Link>

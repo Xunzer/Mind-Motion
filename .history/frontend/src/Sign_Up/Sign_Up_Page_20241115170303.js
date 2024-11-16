@@ -60,8 +60,8 @@ export default function SignInSide(props) {
 
     setTimeout(() => {
       setTime(950)
-      setSignInDirection("right")
-      setContentAnimation("left")
+      setSignInDirection("left")
+      setContentAnimation("right")
       setSignInAnimation(true)
       setContentAnimation(true)
       

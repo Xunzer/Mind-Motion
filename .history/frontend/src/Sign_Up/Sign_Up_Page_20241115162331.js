@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Stack from '@mui/material/Stack';
 import SignInCard from './SignInCard';
-import SignUpCard from './SignUpCard';
 import Content from './Content';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
@@ -15,6 +14,8 @@ import Slide from '@mui/material/Slide';
 export default function SignInSide(props) {
   //* Default setup
   const [darkMode, setDarkMode] = useState(false);
+
+
   const theme = createTheme({
     palette: {
       mode:  'dark' 
@@ -28,47 +29,21 @@ export default function SignInSide(props) {
   //* Animation
   const [signInDirection, setSignInDirection] = useState("right")
   const [contentDirection, setContentDirection] = useState("left")
-  const [signUpDirection, setSignUpDirection] = useState("right")
-
-
-  const [signInAnimation, setSignInAnimation] = useState(true)
-  const [contentAnimation, setContentAnimation] = useState(true)
-  const [signUpAnimation, setSignUpAnimation] = useState(false)
-
-
-  const [time, setTime] = useState(950)
-  const signInToSignUpTransition = () => {
-    setTime(400)
-    setSignInDirection("right")
-    setContentAnimation("left")
-    setSignInAnimation(false)
-    setContentAnimation(false)
-
+  const [beginAnimation, setBegainAnimation] = useState(true)
+  const [time, setTime] = useState(800)
+  const handlePageSwitch = () => {
+    setTime(300)
+  
     setTimeout(() => {
-      setTime(950)
-      setSignUpAnimation(true)
-      
-    }, time); 
-    
-
-  };
-
-  const signUpToSignInTransition = () => {
-    setTime(400)
-    setSignUpAnimation("left")
-    setSignUpAnimation(false)
-
-    setTimeout(() => {
-      setTime(950)
+      setSignInDirection("left")
       setSignInDirection("right")
-      setContentAnimation("left")
-      setSignInAnimation(true)
-      setContentAnimation(true)
-      
+      setBegainAnimation(false)
+     
     }, time); 
-    
 
   };
+
+  
 
   return (
     <ThemeProvider theme={theme}>
@@ -129,31 +104,18 @@ export default function SignInSide(props) {
             >
               <Slide
                 direction={signInDirection}
-                in={signInAnimation}
+                in={beginAnimation}
                 timeout={time}
                 mountOnEnter
                 unmountOnExit
               >
                 <div>
-                  <SignInCard signInToSignUpTransition = {signInToSignUpTransition}/>
+                  <SignInCard />
                 </div>
               </Slide>
-
-              <Slide
-                direction={signUpDirection}
-                in={signUpAnimation}
-                timeout={time}
-                mountOnEnter
-                unmountOnExit
-              >
-                <div>
-                  <SignUpCard signUpToSignInTransition={signUpToSignInTransition}/>
-                </div>
-              </Slide>
-
               <Slide
                 direction={contentDirection}
-                in={contentAnimation}
+                in={beginAnimation}
                 timeout={time}
                 mountOnEnter
                 unmountOnExit
@@ -165,7 +127,15 @@ export default function SignInSide(props) {
             </Stack>
           
         </Stack>
-
+        <Stack direction="row" justifyContent="center" sx={{ mt: 2 }}>
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={handlePageSwitch}
+          >
+            Switch Page
+          </IconButton>
+        </Stack>
       </Stack>
     </ThemeProvider>
   );

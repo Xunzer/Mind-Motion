@@ -18,6 +18,8 @@ import ForgotPassword from './ForgotPassword';
 import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import SitemarkIcon from '@mui/icons-material/AccountTree';
+
+import { Link } from 'react-router-dom';
 const Card = styled(MuiCard)(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
@@ -41,7 +43,7 @@ const Card = styled(MuiCard)(({ theme }) => ({
   }));
   
 
-export default function SignInCard({ signInToSignUpTransition }) {
+export default function SignInCard({ handlePageSwitch }) {
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
@@ -109,7 +111,7 @@ export default function SignInCard({ signInToSignUpTransition }) {
       </Typography>
       <Box
         component="form"
-        onSubmit={handleSubmit}
+        onSubmit={()=>{handleSubmit(); handlePageSwitch()}}
         noValidate
         sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 2 }}
       >
@@ -123,7 +125,7 @@ export default function SignInCard({ signInToSignUpTransition }) {
             name="email"
             placeholder="your@email.com"
             autoComplete="email"
-            
+            autoFocus
             required
             fullWidth
             variant="outlined"
@@ -138,8 +140,7 @@ export default function SignInCard({ signInToSignUpTransition }) {
               type="button"
               onClick={handleClickOpen}
               variant="body2"
-              sx={{ alignSelf: 'baseline', cursor: 'pointer' }}
-    
+              sx={{ alignSelf: 'baseline' }}
             >
               Forgot your password?
             </Link>
@@ -152,7 +153,7 @@ export default function SignInCard({ signInToSignUpTransition }) {
             type="password"
             id="password"
             autoComplete="current-password"
-            
+            autoFocus
             required
             fullWidth
             variant="outlined"
@@ -167,17 +168,11 @@ export default function SignInCard({ signInToSignUpTransition }) {
         <Button type="submit" fullWidth variant="contained" onClick={validateInputs}>
           Sign in
         </Button>
-        <Typography sx={{ textAlign: 'center' }} onClick={signInToSignUpTransition}>
+        <Typography sx={{ textAlign: 'center' }}>
           Don&apos;t have an account?{' '}
-          <span>
-            <Link
-             
-              variant="body2"
-              sx={{ alignSelf: 'center', cursor:"pointer" }}
-            >
-              Sign up
-            </Link>
-          </span>
+          <Link to="/sign-up" style={{ textDecoration: 'underline', color: 'blue' }}>
+            Sign up
+          </Link>
         </Typography>
       </Box>
       <Divider>or</Divider>

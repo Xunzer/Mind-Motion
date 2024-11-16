@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import FlagOutlinedIcon from '@mui/icons-material/FlagOutlined';
 import SitemarkIcon from '@mui/icons-material/AccountTree';  //TODO This can be logo
-import Divider from '@mui/material/Divider';
+
 import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
 import ChecklistOutlinedIcon from '@mui/icons-material/ChecklistOutlined';
 import ExtensionOutlinedIcon from '@mui/icons-material/ExtensionOutlined';
@@ -40,16 +40,7 @@ export default function Content() {
   return (
     <Stack
       sx={{ flexDirection: 'column', alignSelf: 'center', gap: 4, maxWidth: 450 }}
-    > 
-     <Divider
-        orientation="vertical"
-        flexItem
-        sx={{
-          backgroundColor: 'white', // Set the divider's color
-          width: '2px', // Adjust the thickness
-          alignSelf: 'stretch', // Ensure it spans the height of the container
-        }}
-      />
+    >
       <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
         <FlagOutlinedIcon />
       </Box>

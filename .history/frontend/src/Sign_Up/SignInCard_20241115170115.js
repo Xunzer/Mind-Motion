@@ -123,7 +123,7 @@ export default function SignInCard({ signInToSignUpTransition }) {
             name="email"
             placeholder="your@email.com"
             autoComplete="email"
-            
+            autoFocus
             required
             fullWidth
             variant="outlined"
@@ -138,8 +138,7 @@ export default function SignInCard({ signInToSignUpTransition }) {
               type="button"
               onClick={handleClickOpen}
               variant="body2"
-              sx={{ alignSelf: 'baseline', cursor: 'pointer' }}
-    
+              sx={{ alignSelf: 'baseline' }}
             >
               Forgot your password?
             </Link>
@@ -152,7 +151,7 @@ export default function SignInCard({ signInToSignUpTransition }) {
             type="password"
             id="password"
             autoComplete="current-password"
-            
+            autoFocus
             required
             fullWidth
             variant="outlined"
@@ -167,13 +166,13 @@ export default function SignInCard({ signInToSignUpTransition }) {
         <Button type="submit" fullWidth variant="contained" onClick={validateInputs}>
           Sign in
         </Button>
-        <Typography sx={{ textAlign: 'center' }} onClick={signInToSignUpTransition}>
+        <Typography sx={{ textAlign: 'center' }} onClick={handlePageSwitch}>
           Don&apos;t have an account?{' '}
           <span>
             <Link
              
               variant="body2"
-              sx={{ alignSelf: 'center', cursor:"pointer" }}
+              sx={{ alignSelf: 'center' }}
             >
               Sign up
             </Link>

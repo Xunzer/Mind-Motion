@@ -2,16 +2,19 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import FlagOutlinedIcon from '@mui/icons-material/FlagOutlined';
+
+import AutoFixHighRoundedIcon from '@mui/icons-material/AutoFixHighRounded';
+import ConstructionRoundedIcon from '@mui/icons-material/ConstructionRounded';
+import SettingsSuggestRoundedIcon from '@mui/icons-material/SettingsSuggestRounded';
+import ThumbUpAltRoundedIcon from '@mui/icons-material/ThumbUpAltRounded';
 import SitemarkIcon from '@mui/icons-material/AccountTree';  //TODO This can be logo
-import Divider from '@mui/material/Divider';
+
 import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
 import ChecklistOutlinedIcon from '@mui/icons-material/ChecklistOutlined';
 import ExtensionOutlinedIcon from '@mui/icons-material/ExtensionOutlined';
-import SupervisorAccountOutlinedIcon from '@mui/icons-material/SupervisorAccountOutlined';
 const items = [
   {
-    icon: <SupervisorAccountOutlinedIcon sx={{ color: 'text.secondary' }} />,
+    icon: <SettingsSuggestRoundedIcon sx={{ color: 'text.secondary' }} />,
     title: 'Rehabilitation Support',
     description:
       'Our service help stroke patients regain motor skills through targeted hand and body exercises designed for different recovery stages.',
@@ -40,18 +43,9 @@ export default function Content() {
   return (
     <Stack
       sx={{ flexDirection: 'column', alignSelf: 'center', gap: 4, maxWidth: 450 }}
-    > 
-     <Divider
-        orientation="vertical"
-        flexItem
-        sx={{
-          backgroundColor: 'white', // Set the divider's color
-          width: '2px', // Adjust the thickness
-          alignSelf: 'stretch', // Ensure it spans the height of the container
-        }}
-      />
+    >
       <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-        <FlagOutlinedIcon />
+        <SitemarkIcon />
       </Box>
       {items.map((item, index) => (
         <Stack key={index} direction="row" sx={{ gap: 2 }}>

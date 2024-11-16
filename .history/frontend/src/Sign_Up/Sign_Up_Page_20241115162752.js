@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Stack from '@mui/material/Stack';
 import SignInCard from './SignInCard';
-import SignUpCard from './SignUpCard';
 import Content from './Content';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
@@ -37,38 +36,19 @@ export default function SignInSide(props) {
 
 
   const [time, setTime] = useState(950)
-  const signInToSignUpTransition = () => {
+  const handlePageSwitch = () => {
     setTime(400)
-    setSignInDirection("right")
-    setContentAnimation("left")
-    setSignInAnimation(false)
-    setContentAnimation(false)
-
+  
     setTimeout(() => {
-      setTime(950)
-      setSignUpAnimation(true)
-      
-    }, time); 
-    
-
-  };
-
-  const signUpToSignInTransition = () => {
-    setTime(400)
-    setSignUpAnimation("left")
-    setSignUpAnimation(false)
-
-    setTimeout(() => {
-      setTime(950)
       setSignInDirection("right")
-      setContentAnimation("left")
-      setSignInAnimation(true)
-      setContentAnimation(true)
-      
+      setSignInAnimation(false)
+      setSignUpAnimation(true)
+     
     }, time); 
-    
 
   };
+
+  
 
   return (
     <ThemeProvider theme={theme}>
@@ -135,22 +115,9 @@ export default function SignInSide(props) {
                 unmountOnExit
               >
                 <div>
-                  <SignInCard signInToSignUpTransition = {signInToSignUpTransition}/>
+                  <SignInCard />
                 </div>
               </Slide>
-
-              <Slide
-                direction={signUpDirection}
-                in={signUpAnimation}
-                timeout={time}
-                mountOnEnter
-                unmountOnExit
-              >
-                <div>
-                  <SignUpCard signUpToSignInTransition={signUpToSignInTransition}/>
-                </div>
-              </Slide>
-
               <Slide
                 direction={contentDirection}
                 in={contentAnimation}
@@ -165,7 +132,15 @@ export default function SignInSide(props) {
             </Stack>
           
         </Stack>
-
+        <Stack direction="row" justifyContent="center" sx={{ mt: 2 }}>
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={handlePageSwitch}
+          >
+            Switch Page
+          </IconButton>
+        </Stack>
       </Stack>
     </ThemeProvider>
   );

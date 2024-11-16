@@ -40,16 +40,7 @@ export default function Content() {
   return (
     <Stack
       sx={{ flexDirection: 'column', alignSelf: 'center', gap: 4, maxWidth: 450 }}
-    > 
-     <Divider
-        orientation="vertical"
-        flexItem
-        sx={{
-          backgroundColor: 'white', // Set the divider's color
-          width: '2px', // Adjust the thickness
-          alignSelf: 'stretch', // Ensure it spans the height of the container
-        }}
-      />
+    > <Devider
       <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
         <FlagOutlinedIcon />
       </Box>

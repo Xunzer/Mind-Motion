@@ -37,38 +37,19 @@ export default function SignInSide(props) {
 
 
   const [time, setTime] = useState(950)
-  const signInToSignUpTransition = () => {
+  const handlePageSwitch = () => {
     setTime(400)
-    setSignInDirection("right")
-    setContentAnimation("left")
-    setSignInAnimation(false)
-    setContentAnimation(false)
-
+  
     setTimeout(() => {
-      setTime(950)
-      setSignUpAnimation(true)
-      
-    }, time); 
-    
-
-  };
-
-  const signUpToSignInTransition = () => {
-    setTime(400)
-    setSignUpAnimation("left")
-    setSignUpAnimation(false)
-
-    setTimeout(() => {
-      setTime(950)
       setSignInDirection("right")
-      setContentAnimation("left")
-      setSignInAnimation(true)
-      setContentAnimation(true)
-      
+      setSignInAnimation(false)
+      setSignUpAnimation(true)
+     
     }, time); 
-    
 
   };
+
+  
 
   return (
     <ThemeProvider theme={theme}>
@@ -135,7 +116,7 @@ export default function SignInSide(props) {
                 unmountOnExit
               >
                 <div>
-                  <SignInCard signInToSignUpTransition = {signInToSignUpTransition}/>
+                  <SignInCard />
                 </div>
               </Slide>
 
@@ -147,7 +128,7 @@ export default function SignInSide(props) {
                 unmountOnExit
               >
                 <div>
-                  <SignUpCard signUpToSignInTransition={signUpToSignInTransition}/>
+                  <SignUpCard />
                 </div>
               </Slide>
 
@@ -165,7 +146,15 @@ export default function SignInSide(props) {
             </Stack>
           
         </Stack>
-
+        <Stack direction="row" justifyContent="center" sx={{ mt: 2 }}>
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={handlePageSwitch}
+          >
+            Switch Page
+          </IconButton>
+        </Stack>
       </Stack>
     </ThemeProvider>
   );

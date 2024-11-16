@@ -53,22 +53,7 @@ export default function SignInSide(props) {
 
   };
 
-  const signUpToSignInTransition = () => {
-    setTime(400)
-    setSignUpAnimation("left")
-    setSignUpAnimation(false)
-
-    setTimeout(() => {
-      setTime(950)
-      setSignInDirection("right")
-      setContentAnimation("left")
-      setSignInAnimation(true)
-      setContentAnimation(true)
-      
-    }, time); 
-    
-
-  };
+  
 
   return (
     <ThemeProvider theme={theme}>
@@ -147,7 +132,7 @@ export default function SignInSide(props) {
                 unmountOnExit
               >
                 <div>
-                  <SignUpCard signUpToSignInTransition={signUpToSignInTransition}/>
+                  <SignUpCard />
                 </div>
               </Slide>
 

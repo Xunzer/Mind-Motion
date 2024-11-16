@@ -3,21 +3,22 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Stack from '@mui/material/Stack';
 import SignInCard from './SignInCard';
 import SignUpCard from './SignUpCard';
-import Content from './Content';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 
-import Fade from '@mui/material/Fade';
 import Slide from '@mui/material/Slide';
+import { TransitionGroup } from 'react-transition-group';
 
-export default function SignInSide(props) {
+export default function SignInSide() {
   //* Default setup
   const [darkMode, setDarkMode] = useState(false);
+  const [showSignIn, setShowSignIn] = useState(true);
+
   const theme = createTheme({
     palette: {
-      mode:  'dark' 
+      mode: darkMode ? 'dark' : 'light',
     },
   });
 
@@ -25,49 +26,8 @@ export default function SignInSide(props) {
     setDarkMode((prevMode) => !prevMode);
   };
 
-  //* Animation
-  const [signInDirection, setSignInDirection] = useState("right")
-  const [contentDirection, setContentDirection] = useState("left")
-  const [signUpDirection, setSignUpDirection] = useState("right")
-
-
-  const [signInAnimation, setSignInAnimation] = useState(true)
-  const [contentAnimation, setContentAnimation] = useState(true)
-  const [signUpAnimation, setSignUpAnimation] = useState(false)
-
-
-  const [time, setTime] = useState(950)
-  const signInToSignUpTransition = () => {
-    setTime(400)
-    setSignInDirection("right")
-    setContentAnimation("left")
-    setSignInAnimation(false)
-    setContentAnimation(false)
-
-    setTimeout(() => {
-      setTime(950)
-      setSignUpAnimation(true)
-      
-    }, time); 
-    
-
-  };
-
-  const signUpToSignInTransition = () => {
-    setTime(400)
-    setSignUpAnimation("left")
-    setSignUpAnimation(false)
-
-    setTimeout(() => {
-      setTime(950)
-      setSignInDirection("right")
-      setContentAnimation("left")
-      setSignInAnimation(true)
-      setContentAnimation(true)
-      
-    }, time); 
-    
-
+  const handlePageSwitch = () => {
+    setShowSignIn((prev) => !prev);
   };
 
   return (
@@ -109,63 +69,53 @@ export default function SignInSide(props) {
         ]}
       >
         <Stack
-          direction={{ xs: 'column-reverse', md: 'row' }}
+          direction="column"
           sx={{
             justifyContent: 'center',
-            gap: { xs: 6, sm: 12 },
+            alignItems: 'center',
             p: 2,
             mx: 'auto',
           }}
         >
-          
-            <Stack
-              direction={{ xs: 'column-reverse', md: 'row' }}
-              sx={{
-                justifyContent: 'center',
-                gap: { xs: 6, sm: 12 },
-                p: { xs: 2, sm: 4 },
-                m: 'auto',
-              }}
-            >
+          <TransitionGroup>
+            {showSignIn ? (
               <Slide
-                direction={signInDirection}
-                in={signInAnimation}
-                timeout={time}
+                key="signin"
+                direction="right"
+                in={showSignIn}
+                timeout={500}
                 mountOnEnter
                 unmountOnExit
               >
                 <div>
-                  <SignInCard signInToSignUpTransition = {signInToSignUpTransition}/>
+                  <SignInCard />
                 </div>
               </Slide>
-
+            ) : (
               <Slide
-                direction={signUpDirection}
-                in={signUpAnimation}
-                timeout={time}
+                key="signup"
+                direction="left"
+                in={!showSignIn}
+                timeout={500}
                 mountOnEnter
                 unmountOnExit
               >
                 <div>
-                  <SignUpCard signUpToSignInTransition={signUpToSignInTransition}/>
+                  <SignUpCard />
                 </div>
               </Slide>
-
-              <Slide
-                direction={contentDirection}
-                in={contentAnimation}
-                timeout={time}
-                mountOnEnter
-                unmountOnExit
-              >
-                <div>
-                  <Content />
-                </div>
-              </Slide>
-            </Stack>
-          
+            )}
+          </TransitionGroup>
         </Stack>
-
+        <Stack direction="row" justifyContent="center" sx={{ mt: 2 }}>
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={handlePageSwitch}
+          >
+            {showSignIn ? 'Switch to Sign Up' : 'Switch to Sign In'}
+          </IconButton>
+        </Stack>
       </Stack>
     </ThemeProvider>
   );

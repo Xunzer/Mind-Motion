@@ -37,7 +37,7 @@ export default function SignInSide(props) {
 
 
   const [time, setTime] = useState(950)
-  const signInToSignUpTransition = () => {
+  const handlePageSwitch = () => {
     setTime(400)
     setSignInDirection("right")
     setContentAnimation("left")
@@ -53,22 +53,7 @@ export default function SignInSide(props) {
 
   };
 
-  const signUpToSignInTransition = () => {
-    setTime(400)
-    setSignUpAnimation("left")
-    setSignUpAnimation(false)
-
-    setTimeout(() => {
-      setTime(950)
-      setSignInDirection("right")
-      setContentAnimation("left")
-      setSignInAnimation(true)
-      setContentAnimation(true)
-      
-    }, time); 
-    
-
-  };
+  
 
   return (
     <ThemeProvider theme={theme}>
@@ -135,7 +120,7 @@ export default function SignInSide(props) {
                 unmountOnExit
               >
                 <div>
-                  <SignInCard signInToSignUpTransition = {signInToSignUpTransition}/>
+                  <SignInCard handlePageSwitch={handlePageSwitch}/>
                 </div>
               </Slide>
 
@@ -147,7 +132,7 @@ export default function SignInSide(props) {
                 unmountOnExit
               >
                 <div>
-                  <SignUpCard signUpToSignInTransition={signUpToSignInTransition}/>
+                  <SignUpCard />
                 </div>
               </Slide>
 
