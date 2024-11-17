@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useCallback, useState } from 'react';
 import * as pose from '@mediapipe/pose';
 import * as cam from '@mediapipe/camera_utils';
 import Alert from '@mui/material/Alert';
+import Snackbar from "@mui/material/Snackbar";
 
 const PoseDetection = ({ exercise }) => {
   const videoRef = useRef(null);
@@ -22,6 +23,37 @@ const PoseDetection = ({ exercise }) => {
   const [counterDisplay, setCounterDisplay] = useState(0);
   const [exerciseFinished, setExerciseFinished] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success"); // "success", "error", "warning", "info"
+  const lastFeedbackTime = useRef(0); // Track the last feedback time in milliseconds
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const showThrottledFeedback = (message, severity = "success", throttleTime = 1500) => {
+    const currentTime = Date.now();
+    if (currentTime - lastFeedbackTime.current >= throttleTime) {
+      lastFeedbackTime.current = currentTime;
+      setSnackbarMessage(message);
+      setSnackbarSeverity(severity);
+      setSnackbarOpen(true);
+    }
+  };
+
+  const handleCurlMoreFeedback = () => {
+    showThrottledFeedback("Curl more! Keep improving your form.", "warning", 2000); // Feedback every 3 seconds
+  };
+
+  const handleRepCompleteFeedback = () => {
+    showThrottledFeedback("Great rep! Keep going further!", "success", 2000); // Feedback every 3 seconds
+  };
+
+  const startExerciseFeedback = () => {
+    showThrottledFeedback("Start the exercise by curling.", "info", 2000); // Feedback every 3 seconds
+  };
 
   // Memoize the onResults function to avoid re-creating it unnecessarily
   const onResults = useCallback((results) => {
@@ -150,6 +182,7 @@ const PoseDetection = ({ exercise }) => {
       stage = "down";
       minAngle = 40;
       notAdded = true;
+      startExerciseFeedback();
     } else if (angle <= 40 && stage === "down") {
       stage = "up";
     } else if (angle <= 40 && stage === "up") {
@@ -171,8 +204,10 @@ const PoseDetection = ({ exercise }) => {
           console.log("Total Score: " + totalScore);
           setCounterDisplay(prevCounterDisplay => prevCounterDisplay+ 1);
         }
+        handleRepCompleteFeedback();
       }
     } else if (angle > 40 && angle < 100 && stage === "down" ){
+      handleCurlMoreFeedback();
       console.log("curl more")
     }
     console.log("counter = " + counter);
@@ -406,6 +441,37 @@ const PoseDetection = ({ exercise }) => {
           ></video>
         </div>
       )}
+
+    <Snackbar
+      open={snackbarOpen}
+      autoHideDuration={4000} // Increased duration to give more time to read
+      onClose={handleSnackbarClose}
+      anchorOrigin={{ vertical: "top", horizontal: "center" }}
+    >
+      <Alert
+        onClose={handleSnackbarClose}
+        severity={snackbarSeverity}
+        sx={{
+          width: "100%",
+          fontSize: "1rem", // Increased font size for better readability
+          fontWeight: "bold", // Make text bolder for emphasis
+          padding: "15px", // Add more padding for spacious content
+          borderRadius: "10px", // Rounded corners for a modern look
+          lineHeight: "1.5", // Improved line spacing for readability
+          boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)", // Add shadow for emphasis
+          backgroundColor: "#1e1e1e", // Softer background color for comfort
+          color: "#f5f5f5", // Dark text color for better contrast
+          "& .MuiAlert-icon": {
+            fontSize: "1.5rem", // Larger icon size for easier recognition
+          },
+          "& .MuiAlert-action": {
+            alignItems: "center",
+          },
+        }}
+      >
+        {snackbarMessage}
+      </Alert>
+    </Snackbar>
 
       {/*Stick Figure Visualization*/}
       <div style={{ position: 'relative' }}>
