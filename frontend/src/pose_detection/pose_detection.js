@@ -6,6 +6,7 @@ import Snackbar from "@mui/material/Snackbar";
 import knee_extension_gif from '../gifs/knee_extension.gif';
 import bicep_curl_gif from '../gifs/bicep_curl.gif'
 import open_arm_png from '../gifs/open_arm.png'
+import "./css/pose_detection.css";
 
 const PoseDetection = ({ exercise }) => {
   const videoRef = useRef(null);
@@ -464,10 +465,10 @@ const PoseDetection = ({ exercise }) => {
       
       {!start ? (
         // When exercise has not started, display a message or another component
-        <div>
+        <div className = "instruction_page">
           <h2>{instruction}</h2>
           {gifSrc && <img src={gifSrc} alt={exercise} style={{ width: '600px', height: 'auto' }} />}
-          <button onClick={startExercise}>Start Exercise</button>
+          <button className="start-exercise-button" onClick={startExercise}>Start Exercise</button>
         </div>
       ) : (
         // When exercise has started, render the video feed and score
