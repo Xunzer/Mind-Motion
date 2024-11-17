@@ -218,7 +218,7 @@ const GamingPage = () => {
         </Typography>
         </Box>
       </Box>
-      <Drawer
+      {/* <Drawer
         sx={{
           width: drawerWidth,
           flexShrink: 0,
@@ -244,7 +244,7 @@ const GamingPage = () => {
           </ListItem>
           <Divider />
         </List>
-      </Drawer>
+      </Drawer> */}
     </Box>
     </ThemeProvider>
     </section>

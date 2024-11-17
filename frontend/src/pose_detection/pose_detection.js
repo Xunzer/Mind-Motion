@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useCallback, useState } from 'react';
 import * as pose from '@mediapipe/pose';
 import * as cam from '@mediapipe/camera_utils';
+import Alert from '@mui/material/Alert';
 
 const PoseDetection = ({ exercise }) => {
   const videoRef = useRef(null);
@@ -18,6 +19,9 @@ const PoseDetection = ({ exercise }) => {
   let repComplete = false; // Flag to track if rep is completed
   let minDistance = 0;
   let finished = false;
+  const [counterDisplay, setCounterDisplay] = useState(0);
+  const [exerciseFinished, setExerciseFinished] = useState(false);
+  const [finalScore, setFinalScore] = useState(0);
 
   // Memoize the onResults function to avoid re-creating it unnecessarily
   const onResults = useCallback((results) => {
@@ -98,6 +102,8 @@ const PoseDetection = ({ exercise }) => {
       return;
     }
     if (counter >= 10){
+      setFinalScore(totalScore);
+      setExerciseFinished(true);
       console.log("Total Score: " + totalScore);
       console.log("You finished this exercise, move to the next one!")
       const avgScore = totalScore / counter;
@@ -163,6 +169,7 @@ const PoseDetection = ({ exercise }) => {
           counter += 1;
           notAdded = false;
           console.log("Total Score: " + totalScore);
+          setCounterDisplay(prevCounterDisplay => prevCounterDisplay+ 1);
         }
       }
     } else if (angle > 40 && angle < 100 && stage === "down" ){
@@ -277,11 +284,6 @@ const PoseDetection = ({ exercise }) => {
     console.log("current score = " + totalScore);
   }
 
-
-
-
-
-
   const openArms = (landmarks, ctx) => {
     const shoulder = landmarks[pose.POSE_LANDMARKS.RIGHT_SHOULDER];
     const hip = landmarks[pose.POSE_LANDMARKS.RIGHT_HIP];
@@ -368,11 +370,6 @@ const PoseDetection = ({ exercise }) => {
     openArms,
   };
 
-
-
-
-
-
   // Function to calculate angle between three points
   const calculateAngle = (pointA, pointB, pointC) => {
     const ba = { x: pointA.x - pointB.x, y: pointA.y - pointB.y };
@@ -391,25 +388,36 @@ const PoseDetection = ({ exercise }) => {
   return (
     <div style={{ display: 'flex', justifyContent: 'space-around', padding: '20px' }}>
       {/* Camera Feed */}
-      <div style={{ position: 'relative' }}>
-        <h2>Live Camera Feed</h2>
-        <video
-          ref={videoRef}
-          style={{ width: '400px', height: '480px', border: '1px solid black' }}
-          autoPlay
-          muted
-        ></video>
-      </div>
+      {exerciseFinished ? (
+        // When exercise is finished, show a new page (can be a message, component, etc.)
+        <div style={{ padding: '20px' }}>
+          <h2>Exercise Completed!</h2>
+          <p>Total Score: {finalScore}</p>
+          {/* You can add more content or components for the new page */}
+        </div>
+      ) : (
+        // When exercise is not finished, show the video feed
+        <div style={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
+          <video
+            ref={videoRef}
+            style={{ width: '640px', height: '480px', border: '1px solid black' }}
+            autoPlay
+            muted
+          ></video>
+        </div>
+      )}
 
-      {/* Stick Figure Visualization */}
+      {/*Stick Figure Visualization*/}
       <div style={{ position: 'relative' }}>
-        <h2>Pose Representation</h2>
         <canvas
           ref={canvasRef}
-          width="640"
-          height="480"
+          width="0"
+          height="0"
           style={{ border: '1px solid black' }}
         ></canvas>
+      </div>
+      <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'green' }}>
+        Count: {counterDisplay}
       </div>
     </div>
   );
