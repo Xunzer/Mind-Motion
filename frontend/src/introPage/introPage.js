@@ -1,12 +1,9 @@
 import React from 'react';
 import './css/introPage.css';
 import logo from '../assets/app_logo.png'; // Update to match the actual file name
-import { Box, Typography, Button } from '@mui/material';
-import { FitnessCenter, Timeline, EmojiEvents, TrackChanges } from '@mui/icons-material';
 import { useNavigate } from "react-router-dom";
 import { Box, Typography, Button, Grid, Card, CardContent, CardMedia } from '@mui/material';
 import { FitnessCenter, Timeline, EmojiEvents, TrackChanges } from '@mui/icons-material';
-import logo from '../assets/app_logo.png'; // Update with the actual path
 import "./css/Stickman.css"
 const IntroPage = () => {
   const navigate = useNavigate();
