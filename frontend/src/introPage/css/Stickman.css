@@ -1,0 +1,106 @@
+.exercise-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 40px; /* Space between figures */
+    margin-top: 40px;
+  }
+  
+  /* Shared stickman styles */
+  .stickman {
+    position: relative;
+    width: 60px;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Head */
+  .head {
+    width: 20px;
+    height: 20px;
+    background-color: #42a5f5; /* Brand color */
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+  }
+  
+  /* Body */
+  .body {
+    width: 4px;
+    height: 50px;
+    background-color: #ffffff;
+    position: absolute;
+    top: 20px;
+  }
+  
+  /* Arms */
+  .arm {
+    width: 30px;
+    height: 4px;
+    background-color: #ffffff;
+    position: absolute;
+    top: 30px; /* Align with the body */
+    transition: transform 0.3s ease;
+  }
+  
+  .arm.left {
+    transform: rotate(-45deg);
+    transform-origin: left center;
+    left: -15px; /* Connect to the body */
+  }
+  
+  .arm.right {
+    transform: rotate(45deg);
+    transform-origin: right center;
+    right: -15px; /* Connect to the body */
+  }
+  
+  /* Legs */
+  .leg {
+    width: 30px;
+    height: 4px;
+    background-color: #ffffff;
+    position: absolute;
+    bottom: 0;
+    transition: transform 0.3s ease;
+  }
+  
+  .leg.left {
+    transform: rotate(-30deg);
+    transform-origin: top center; /* Ensure it connects to the body */
+    left: -10px;
+  }
+  
+  .leg.right {
+    transform: rotate(30deg);
+    transform-origin: top center; /* Ensure it connects to the body */
+    right: -10px;
+  }
+  
+  /* Pose Styles */
+  .stretching .arm.left {
+    transform: rotate(-90deg);
+  }
+  
+  .stretching .leg.left {
+    transform: rotate(-45deg);
+  }
+  
+  .stretching .leg.right {
+    transform: rotate(45deg);
+  }
+  
+  .lunging .arm.right {
+    transform: rotate(30deg);
+  }
+  
+  .lunging .leg.left {
+    transform: rotate(-20deg);
+  }
+  
+  .lunging .leg.right {
+    transform: rotate(90deg);
+  }
+  

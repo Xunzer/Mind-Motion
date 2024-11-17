@@ -14,7 +14,6 @@ const App = () => {
         <Route path="/" element={<Navigate to="/intro" />} />
         <Route path="/exercise" element={<GamingPage />} />
         <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/signin" element={<SignUpPage />} />
         <Route path="/intro" element={<IntroPage />} />
         <Route path="/dashboard" element={<DashboardLayoutBasic />} />
         <Route path="/pose_detection" element={<PoseDetection/>} />

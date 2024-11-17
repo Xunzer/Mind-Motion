@@ -1,0 +1,123 @@
+.stickman-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #282c34;
+  }
+  
+  .stickman {
+    position: relative;
+    animation: jump 1.5s infinite ease-in-out;
+  }
+  
+  /* Head */
+  .stickman-head {
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  /* Body */
+  .stickman-body {
+    width: 10px;
+    height: 60px;
+    background-color: white;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  /* Arms */
+  .stickman-arm {
+    width: 10px;
+    height: 50px;
+    background-color: white;
+    position: absolute;
+    transform-origin: top;
+  }
+  
+  .stickman-arm-left {
+    left: -30px;
+    top: 10px;
+    animation: arm-move-left 1.5s infinite ease-in-out;
+  }
+  
+  .stickman-arm-right {
+    right: -30px;
+    top: 10px;
+    animation: arm-move-right 1.5s infinite ease-in-out;
+  }
+  
+  /* Legs */
+  .stickman-leg {
+    width: 10px;
+    height: 50px;
+    background-color: white;
+    position: absolute;
+    bottom: 0;
+    transform-origin: top;
+  }
+  
+  .stickman-leg-left {
+    left: -10px;
+    animation: leg-move-left 1.5s infinite ease-in-out;
+  }
+  
+  .stickman-leg-right {
+    right: -10px;
+    animation: leg-move-right 1.5s infinite ease-in-out;
+  }
+  
+  /* Animations */
+  @keyframes arm-move-left {
+    0%, 100% {
+      transform: rotate(0deg);
+    }
+    50% {
+      transform: rotate(-60deg);
+    }
+  }
+  
+  @keyframes arm-move-right {
+    0%, 100% {
+      transform: rotate(0deg);
+    }
+    50% {
+      transform: rotate(60deg);
+    }
+  }
+  
+  @keyframes leg-move-left {
+    0%, 100% {
+      transform: rotate(0deg);
+    }
+    50% {
+      transform: rotate(-30deg);
+    }
+  }
+  
+  @keyframes leg-move-right {
+    0%, 100% {
+      transform: rotate(0deg);
+    }
+    50% {
+      transform: rotate(30deg);
+    }
+  }
+  
+  @keyframes jump {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-30px);
+    }
+  }
+  
