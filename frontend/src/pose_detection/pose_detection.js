@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useCallback, useState } from 'react';
 import * as pose from '@mediapipe/pose';
 import * as cam from '@mediapipe/camera_utils';
 
-const PoseDetection = () => {
+const PoseDetection = ({ exercise }) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const poseRef = useRef(null);
@@ -16,6 +16,8 @@ const PoseDetection = () => {
   let ideal_rom = 0;
   let rom_score = 0;
   let repComplete = false; // Flag to track if rep is completed
+  let minDistance = 0;
+  let finished = false;
 
   // Memoize the onResults function to avoid re-creating it unnecessarily
   const onResults = useCallback((results) => {
@@ -25,7 +27,11 @@ const PoseDetection = () => {
 
     if (results.poseLandmarks) {
       drawStickFigure(results.poseLandmarks, canvasCtx);
-      leftKneeExtension(results.poseLandmarks, canvasCtx); // change function to test
+      if (exerciseFunctions[exercise]) {
+        exerciseFunctions[exercise](results.poseLandmarks, canvasCtx);
+      } else {
+        console.warn(`No function defined for stage: ${stage}`);
+      }
     }
   }, []);
 
@@ -280,8 +286,11 @@ const PoseDetection = () => {
     const shoulder = landmarks[pose.POSE_LANDMARKS.RIGHT_SHOULDER];
     const hip = landmarks[pose.POSE_LANDMARKS.RIGHT_HIP];
     const wrist = landmarks[pose.POSE_LANDMARKS.RIGHT_WRIST];
+    const elbow = landmarks[pose.POSE_LANDMARKS.RIGHT_ELBOW];
 
-    if (counter >= 10){
+    if (finished){
+      console.log("total score " + totalScore)
+      console.log("You get "+ totalScore/(counter*10)*100 + "%")
       console.log("You finished this exercise, move to the next one!")
       return;
     }
@@ -294,15 +303,34 @@ const PoseDetection = () => {
     const wristDistance = wrist.x - elbow.x;
     if ( wristDistance < -0.18 && stage === "in") {
       stage = "out";
-      console.log("stage = " + stage)
       counter = counter + 1;
+      console.log("counter " + counter)
+      minDistance = -0.18;
+      notAdded = false;
+    } else if (wristDistance < -0.18 && stage === "out") {
+      minDistance = Math.min(minDistance, wristDistance);
     } else if (Math.abs(wristDistance) < 0.05 && stage === "out") {
       console.log("Forearm is moving outward.");
       stage = "in";
       console.log("stage = " + stage)
+      if (!notAdded){
+        if (minDistance <= -0.18 && -0.19 < minDistance) {
+          totalScore += 8;
+          console.log("Total Score: " + totalScore);
+        } else if (minDistance < -0.19 && -0.20 < minDistance) {
+          totalScore += 9;
+          console.log("Total Score: " + totalScore);
+        } else if (minDistance < -0.20) {
+          totalScore += 10;
+          console.log("Total Score: " + totalScore);
+        }
+        notAdded = true;
+        if (counter===10){
+          finished = true;
+        }
+      }
     } else if (Math.abs(wristDistance) < 0.05){
       stage = "in";
-      console.log("stage = " + stage)
     };
 
     console.log("counter = " + counter);
@@ -332,6 +360,13 @@ const PoseDetection = () => {
     return angleHistory.reduce((sum, angle) => sum + angle, 0) / angleHistory.length; // Take the average of the last 5 recorded angles and return it
   };
 
+  const exerciseFunctions = {
+    rightBicepCurl,
+    leftBicepCurl,
+    rightKneeExtension,
+    leftKneeExtension,
+    openArms,
+  };
 
 
 
@@ -360,7 +395,7 @@ const PoseDetection = () => {
         <h2>Live Camera Feed</h2>
         <video
           ref={videoRef}
-          style={{ width: '200px', height: '480px', border: '1px solid black' }}
+          style={{ width: '400px', height: '480px', border: '1px solid black' }}
           autoPlay
           muted
         ></video>
