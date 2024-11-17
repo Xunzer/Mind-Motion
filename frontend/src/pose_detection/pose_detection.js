@@ -133,6 +133,8 @@ const PoseDetection = ({ exercise }) => {
       landmarks[pose.POSE_LANDMARKS.LEFT_WRIST]
     );
     if (counter >= 10){
+      setFinalScore(totalScore);
+      setExerciseFinished(true);
       console.log("You finished this exercise, move to the next one!")
       return;
     }
@@ -183,6 +185,8 @@ const PoseDetection = ({ exercise }) => {
       return;
     }
     if (counter >= 10){
+      setFinalScore(totalScore);
+      setExerciseFinished(true);
       console.log("You finished this exercise, move to the next one!")
       return;
     }
@@ -218,6 +222,8 @@ const PoseDetection = ({ exercise }) => {
       return;
     }
     if (counter >= 10) {
+      setFinalScore(totalScore);
+      setExerciseFinished(true);
       console.log("You finished this exercise, move to the next one!");
       return;
     }
@@ -260,6 +266,7 @@ const PoseDetection = ({ exercise }) => {
       counter = counter + 1
       stage = "up";
       repComplete = true
+      setCounterDisplay(prevCounterDisplay => prevCounterDisplay+ 1);
     } 
     if (angle >= 130 && stage === "up" && repComplete) {
       console.log("ROM Score:", Math.round((angle / ideal_rom) * 100));
@@ -294,6 +301,8 @@ const PoseDetection = ({ exercise }) => {
       console.log("total score " + totalScore)
       console.log("You get "+ totalScore/(counter*10)*100 + "%")
       console.log("You finished this exercise, move to the next one!")
+      setFinalScore(totalScore);
+      setExerciseFinished(true);
       return;
     }
 
@@ -306,6 +315,7 @@ const PoseDetection = ({ exercise }) => {
     if ( wristDistance < -0.18 && stage === "in") {
       stage = "out";
       counter = counter + 1;
+      setCounterDisplay(prevCounterDisplay => prevCounterDisplay+ 1);
       console.log("counter " + counter)
       minDistance = -0.18;
       notAdded = false;
@@ -391,8 +401,8 @@ const PoseDetection = ({ exercise }) => {
       {exerciseFinished ? (
         // When exercise is finished, show a new page (can be a message, component, etc.)
         <div style={{ padding: '20px' }}>
-          <h2>Exercise Completed!</h2>
-          <p>Total Score: {finalScore}</p>
+          <h2>Exercise Finished!</h2>
+          <h2>Total Score: {finalScore}%</h2>
           {/* You can add more content or components for the new page */}
         </div>
       ) : (
@@ -417,7 +427,7 @@ const PoseDetection = ({ exercise }) => {
         ></canvas>
       </div>
       <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'green' }}>
-        Count: {counterDisplay}
+        Count: {counterDisplay}/10
       </div>
     </div>
   );
