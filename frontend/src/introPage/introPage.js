@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Typography, Button, Grid, Card, CardContent, CardMedia } from '@mui/material';
 import { FitnessCenter, Timeline, EmojiEvents, TrackChanges } from '@mui/icons-material';
 import logo from '../assets/image.png'; // Update with the actual path
-
+import "./css/Stickman.css"
 const IntroPage = () => {
   const navigate = useNavigate();
 
