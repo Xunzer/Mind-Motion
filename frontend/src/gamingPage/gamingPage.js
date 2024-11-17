@@ -213,9 +213,6 @@ const GamingPage = () => {
         <div className="video-container">
           {renderStageContent()}
         </div>
-        <Typography sx={{marginTop: "20px", textAlign: 'center'}}>
-          Stage description
-        </Typography>
         </Box>
       </Box>
       {/* <Drawer
