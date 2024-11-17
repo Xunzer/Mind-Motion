@@ -151,7 +151,7 @@ const GamingPage = () => {
             src={AppLogo}
             alt="Logo"
             style={{ height: '40px', cursor: 'pointer' }} // Style as needed
-            onClick={() => navigate('/')} // Optional: Navigate to home on click
+            onClick={() => navigate('/dashboard')} // Optional: Navigate to home on click
           />
           <Box sx={{ marginLeft: 'auto' }}>
             <IconButton onClick={handleChange} color="inherit">

@@ -274,9 +274,6 @@ const ReportsPage = () => {
     return (
     <PageContainer>
         <Paper elevation={3} style={{ padding: 24 }}>
-        <Typography variant="h4" gutterBottom>
-            Reports
-        </Typography>
         <Typography variant="body1" color="textSecondary">
             Daily Exercise Count
         </Typography>
@@ -308,9 +305,9 @@ export default function DashboardLayoutBasic(props) {
         case '/myAccount':
         return <ProfilePage />;
         case '/reports':
+        default:  
         return <ReportsPage />;
         case '/dashboard':
-        default:
         return <DashboardContent />;
     }
     };
@@ -320,7 +317,7 @@ export default function DashboardLayoutBasic(props) {
         navigation={NAVIGATION}
         branding={{
           logo: <img src={AppLogoDark} alt="MUI logo" />,
-          title: ''
+          title: '',
         }}
         router={router}
         theme={demoTheme}
