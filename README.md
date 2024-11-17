@@ -23,7 +23,7 @@ The platform offers a supportive digital environment where patients can perform 
 |---------------|
 | Anthony Mirza |
 | Tina Nguyen |
-| Row 3 Content |
+| Zongxin Liu|
 | Row 4 Content |
 | Row 5 Content |
 | Row 6 Content |
