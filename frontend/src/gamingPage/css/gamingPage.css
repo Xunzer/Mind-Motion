@@ -1,14 +1,10 @@
-.gaming-page-container{
-  background: linear-gradient(135deg, #0a1e3a 50%, #152a45 50%);
-  color: #ffffff;
-}
-
 .stage-title {
   font-weight: bold;
 }
 
 .video-container {
   position: relative;
+  border-radius: 15px; /* Adjust the radius as needed */
   display: flex;
   justify-content: center;
   margin-inline: auto;

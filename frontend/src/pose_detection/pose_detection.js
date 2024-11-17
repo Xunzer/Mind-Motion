@@ -474,7 +474,7 @@ const PoseDetection = ({ exercise }) => {
       {!start ? (
         // When exercise has not started, display a message or another component
         <div className = "instruction_page">
-          <h2>{instruction}</h2>
+          <h2 style={{ color: 'white' }}>{instruction}</h2>
           {gifSrc && <img src={gifSrc} alt={exercise} style={{ width: '600px', height: 'auto' }} />}
           <button className="start-exercise-button" onClick={startExercise}>Start Exercise</button>
         </div>
@@ -485,8 +485,8 @@ const PoseDetection = ({ exercise }) => {
           {exerciseFinished ? (
             // When exercise is finished, show a new page (can be a message, component, etc.)
             <div style={{ padding: '20px' }}>
-              <h2>Exercise Finished!</h2>
-              <h2>Total Score: {finalScore}%</h2>
+              <h2 style={{ color: 'white' }}>Exercise Finished!</h2>
+              <h2 style={{ color: 'white' }}>Total Score: {finalScore}%</h2>
               {/* You can add more content or components for the new page */}
             </div>
           ) : (
