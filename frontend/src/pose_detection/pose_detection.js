@@ -492,7 +492,7 @@ const PoseDetection = ({ exercise }) => {
             <div style={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
               <video
                 ref={videoRef}
-                style={{ width: '640px', height: '480px', border: '1px solid black' }}
+                style={{ width: '640px', height: '480px', border: '1px solid black', borderRadius: '15px' }}
                 autoPlay
                 muted
               ></video>
