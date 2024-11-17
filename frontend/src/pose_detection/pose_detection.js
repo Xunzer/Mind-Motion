@@ -346,7 +346,9 @@ const PoseDetection = ({ exercise }) => {
       console.log("counter = " + counter);
       console.log("rom_score for this rep = " + rom_score);
       console.log("current score = " + totalScore);
-    } 
+    } else if (angle < 130 && stage === "up") {
+      handleFinishFeedback();
+    }
     console.log("counter = " + counter);
     console.log("current score = " + totalScore);
   }
