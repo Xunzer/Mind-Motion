@@ -3,8 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-d
 import GamingPage from './gamingPage/gamingPage';
 import SignUpPage from "./signUpPage/signUpPage"
 import IntroPage from "./introPage/introPage"
-import DashboardLayoutBasic from './dashboard';
-
+import DashboardLayoutBasic from "./dashboard/dashboard";
 import './App.css';
 import PoseDetection from './pose_detection/pose_detection';
 

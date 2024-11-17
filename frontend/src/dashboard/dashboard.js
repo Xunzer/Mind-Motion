@@ -5,17 +5,19 @@ import BarChartIcon from '@mui/icons-material/BarChart';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { PageContainer } from '@toolpad/core/PageContainer';
+import { useNavigate } from 'react-router-dom';
 import Grid from '@mui/material/Grid2';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import mindMotionIcon from './assets/mindMotion.png'; // Ensure the correct path to the image file
+import mindMotionIcon from '../assets/mindMotion.png'; // Ensure the correct path to the image file
 import { useTheme } from '@mui/material/styles'; // Import useTheme to access the current theme
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import logoImage from './assets/logo.jpg';
+import logoImage from '../assets/logo.jpg';
+import AppLogoDark from '../assets/app_logo_blue.png';
 import { Dialog, DialogContent, DialogContentText } from '@mui/material';
 import { useState, useEffect } from 'react';
 
@@ -105,7 +107,8 @@ const ProfilePage = () => (
   );
   const DashboardContent = () => {
     const theme = useTheme();
-  
+    const navigate = useNavigate();
+
     const levels = [
       { name: 'Level 1', color: 'primary' },
       { name: 'Level 2', color: 'grey' },
@@ -219,6 +222,11 @@ const ProfilePage = () => (
                   boxShadow: '0px 6px 15px rgba(0, 0, 0, 0.2)',
                   transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                 }}
+                onClick={() => {
+                  if (index === 0) {
+                    navigate('/exercise');  // Use React Router's navigate
+                  }
+                }}
                 onMouseOver={(e) => {
                   e.target.style.transform = 'scale(1.2)';
                   e.target.style.boxShadow = '0px 8px 20px rgba(0, 0, 0, 0.4)';
@@ -310,6 +318,10 @@ export default function DashboardLayoutBasic(props) {
     return (
     <AppProvider
         navigation={NAVIGATION}
+        branding={{
+          logo: <img src={AppLogoDark} alt="MUI logo" />,
+          title: ''
+        }}
         router={router}
         theme={demoTheme}
         window={demoWindow}
