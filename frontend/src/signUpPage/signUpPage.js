@@ -14,13 +14,12 @@ import Slide from '@mui/material/Slide';
 
 export default function SignUpPage() {
   const location = useLocation();
-  let parent_button = location.state?.parent_button || true; // Default to `false` if undefined
-  console.log("parnet button ", parent_button);
+
   //* Default setup
   const [darkMode, setDarkMode] = useState(false);
   const theme = createTheme({
     palette: {
-      mode:  'dark' 
+      mode:  darkMode ? 'dark' : "light"
     },
   });
 
@@ -34,19 +33,12 @@ export default function SignUpPage() {
   const [signUpDirection, setSignUpDirection] = useState("right")
 
 
-  const [signInAnimation, setSignInAnimation] = useState(true)
-  const [contentAnimation, setContentAnimation] = useState(true)
-  const [signUpAnimation, setSignUpAnimation] = useState(false)
+  const [signInAnimation, setSignInAnimation] = useState(false)
+  const [contentAnimation, setContentAnimation] = useState(false)
+  const [signUpAnimation, setSignUpAnimation] = useState(true)
 
 
   const [time, setTime] = useState(950)
-
-  //! important stuff : false means signup
-  if (parent_button == false){
-    setSignInAnimation(false)
-    setContentAnimation(false)
-    setSignUpAnimation(true)
-  }
 
 
 

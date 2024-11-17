@@ -9,6 +9,7 @@ import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
 import ChecklistOutlinedIcon from '@mui/icons-material/ChecklistOutlined';
 import ExtensionOutlinedIcon from '@mui/icons-material/ExtensionOutlined';
 import SupervisorAccountOutlinedIcon from '@mui/icons-material/SupervisorAccountOutlined';
+import { border } from '@mui/system';
 const items = [
   {
     icon: <SupervisorAccountOutlinedIcon sx={{ color: 'text.secondary' }} />,
@@ -50,8 +51,12 @@ export default function Content() {
           alignSelf: 'stretch', // Ensure it spans the height of the container
         }}
       />
-      <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+      <Box sx={{ display: { xs: 'none', md: 'flex' }, gap : 2 }}>
         <FlagOutlinedIcon />
+        <Typography variant='h6'>
+            Thank You For Choosing Mind & Motion
+        </Typography>
+        
       </Box>
       {items.map((item, index) => (
         <Stack key={index} direction="row" sx={{ gap: 2 }}>
