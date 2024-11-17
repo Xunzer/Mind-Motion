@@ -5,6 +5,7 @@ import Alert from '@mui/material/Alert';
 import Snackbar from "@mui/material/Snackbar";
 import knee_extension_gif from '../gifs/knee_extension.gif';
 import bicep_curl_gif from '../gifs/bicep_curl.gif'
+import open_arm_png from '../gifs/open_arm.png'
 
 const PoseDetection = ({ exercise }) => {
   const videoRef = useRef(null);
@@ -26,6 +27,7 @@ const PoseDetection = ({ exercise }) => {
   const [exerciseFinished, setExerciseFinished] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
   const [start, setStart] = useState(false);
+  const [instruction, setInstruction] = useState("");
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -79,14 +81,19 @@ const PoseDetection = ({ exercise }) => {
     // Update the gifSrc based on the exercise prop
     if (exercise === 'rightKneeExtension') {
       setGifSrc(knee_extension_gif);
+      setInstruction("Start seated with good posture. Extend your right leg to straighten the knee, contracting your quadriceps. Hold for 3 seconds, then slowly lower your foot back to the floor.")
     } else if (exercise == 'leftKneeExtension') {
       setGifSrc(knee_extension_gif);
+      setInstruction("Start seated with good posture. Extend your left leg to straighten the knee, contracting your quadriceps. Hold for 3 seconds, then slowly lower your foot back to the floor.")
     } else if (exercise === 'rightBicepCurl') {
       setGifSrc(bicep_curl_gif);
+      setInstruction("Start with your right elbow bent at 90 degrees. Curl your right hand towards your shoulder, then lower it. Repeat 10 times.")
     } else if (exercise == 'leftBicepCurl') {
       setGifSrc(bicep_curl_gif);
+      setInstruction("Start with your left elbow bent at 90 degrees. Curl your left hand towards your shoulder, then lower it. Repeat 10 times.")
     } else if (exercise == "openArms") {
-      setGifSrc(null)
+      setGifSrc(open_arm_png)
+      setInstruction("Keep elbows close to your sides, open arms to your sides, then return to center. Repeat 10 times.")
     }
     else {
       setGifSrc(null); // Default case, no gif
@@ -462,7 +469,7 @@ const PoseDetection = ({ exercise }) => {
       {!start ? (
         // When exercise has not started, display a message or another component
         <div>
-          <h2>Welcome! Please press "Start" to begin the exercise.</h2>
+          <h2>{instruction}</h2>
           {gifSrc && <img src={gifSrc} alt={exercise} style={{ width: '600px', height: 'auto' }} />}
           <button onClick={startExercise}>Start Exercise</button>
         </div>
