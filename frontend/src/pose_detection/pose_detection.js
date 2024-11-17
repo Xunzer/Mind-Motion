@@ -4,7 +4,7 @@ import * as cam from '@mediapipe/camera_utils';
 import Alert from '@mui/material/Alert';
 import Snackbar from "@mui/material/Snackbar";
 import knee_extension_gif from '../gifs/knee_extension.gif';
-import bicep_curl_gif from '../gifs/bicep_curl.gif'
+import bicep_curl_gif from '../gifs/curl_bicep.gif'
 import open_arm_png from '../gifs/open_arm.png'
 import "./css/pose_detection.css";
 
@@ -180,7 +180,7 @@ const PoseDetection = ({ exercise }) => {
       return;
     }
     if (counter >= 10){
-      setFinalScore(totalScore);
+      setFinalScore(totalScore.toFixed(0));
       setExerciseFinished(true);
       console.log("Total Score: " + totalScore);
       console.log("You finished this exercise, move to the next one!")
@@ -211,7 +211,7 @@ const PoseDetection = ({ exercise }) => {
       landmarks[pose.POSE_LANDMARKS.LEFT_WRIST]
     );
     if (counter >= 10){
-      setFinalScore(totalScore);
+      setFinalScore(totalScore.toFixed(0));
       setExerciseFinished(true);
       console.log("You finished this exercise, move to the next one!")
       return;
@@ -268,7 +268,7 @@ const PoseDetection = ({ exercise }) => {
       return;
     }
     if (counter >= 10){
-      setFinalScore(totalScore);
+      setFinalScore(totalScore.toFixed(0));
       setExerciseFinished(true);
       console.log("You finished this exercise, move to the next one!")
       return;
@@ -293,7 +293,7 @@ const PoseDetection = ({ exercise }) => {
       return;
     }
     if (counter >= 10) {
-      setFinalScore(totalScore);
+      setFinalScore(totalScore.toFixed(0));
       setExerciseFinished(true);
       console.log("You finished this exercise, move to the next one!");
       return;
@@ -346,7 +346,9 @@ const PoseDetection = ({ exercise }) => {
       console.log("counter = " + counter);
       console.log("rom_score for this rep = " + rom_score);
       console.log("current score = " + totalScore);
-    } 
+    } else if (angle < 130 && stage === "up") {
+      handleFinishFeedback();
+    }
     console.log("counter = " + counter);
     console.log("current score = " + totalScore);
   }
@@ -361,7 +363,7 @@ const PoseDetection = ({ exercise }) => {
       console.log("total score " + totalScore)
       console.log("You get "+ totalScore/(counter*10)*100 + "%")
       console.log("You finished this exercise, move to the next one!")
-      setFinalScore(totalScore);
+      setFinalScore(totalScore.toFixed(0));
       setExerciseFinished(true);
       return;
     }
@@ -484,7 +486,7 @@ const PoseDetection = ({ exercise }) => {
             // When exercise is finished, show a new page (can be a message, component, etc.)
             <div style={{ padding: '20px' }}>
               <h2 style={{ color: 'white' }}>Exercise Finished!</h2>
-              <h2 style={{ color: 'white' }}>Total Score: {finalScore}%</h2>
+              <h2 style={{ color: 'white' }}>Accuracy: {finalScore}%</h2>
               {/* You can add more content or components for the new page */}
             </div>
           ) : (

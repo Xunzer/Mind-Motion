@@ -34,7 +34,7 @@ const GamingPage = () => {
   const navigate = useNavigate(); // For navigating back
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [mode, setMode] = useState(prefersDarkMode || true); // Default to dark mode
-  const [currentStage, setCurrentStage] = useState(null); // State to track the currently rendered stage
+  const [currentStage, setCurrentStage] = useState("Stage1"); // State to track the currently rendered stage
 
   const theme = createTheme({
     palette: {
