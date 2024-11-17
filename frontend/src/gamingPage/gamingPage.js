@@ -206,7 +206,7 @@ const GamingPage = () => {
         sx={{ flexGrow: 1, p: 3 }}
       >
         <Toolbar />
-        <Typography sx={{ marginBottom: 2, textAlign: 'center', fontWeight: 'bold' }}>
+        <Typography sx={{ marginBottom: 2, textAlign: 'center', fontWeight: 'bold', fontSize: '1.5rem' }}>
           {exerciseNames[currentStage]}
         </Typography>
         <Box sx={{ }}>

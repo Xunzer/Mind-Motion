@@ -22,6 +22,7 @@ const PoseDetection = ({ exercise }) => {
   const [counterDisplay, setCounterDisplay] = useState(0);
   const [exerciseFinished, setExerciseFinished] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
+  const [start, setStart] = useState(false);
 
   // Memoize the onResults function to avoid re-creating it unnecessarily
   const onResults = useCallback((results) => {
@@ -55,7 +56,7 @@ const PoseDetection = ({ exercise }) => {
     poseRef.current = poseInstance;
 
     // Set up camera input
-    if (videoRef.current) {
+    if (start && videoRef.current) {
       const camera = new cam.Camera(videoRef.current, {
         onFrame: async () => {
           await poseRef.current.send({ image: videoRef.current });
@@ -66,7 +67,7 @@ const PoseDetection = ({ exercise }) => {
       camera.start();
     }
 
-  }, [onResults]);
+  }, [start, onResults]);
 
   // Function to draw pose landmarks as a stick figure on canvas
   const drawStickFigure = (landmarks, ctx) => {
@@ -395,26 +396,45 @@ const PoseDetection = ({ exercise }) => {
     return (angle * 180) / Math.PI;
   };
 
+  const startExercise = () => {
+    setStart(true); // Set start to true when the exercise begins
+  };
+
   return (
     <div style={{ display: 'flex', justifyContent: 'space-around', padding: '20px' }}>
-      {/* Camera Feed */}
-      {exerciseFinished ? (
-        // When exercise is finished, show a new page (can be a message, component, etc.)
-        <div style={{ padding: '20px' }}>
-          <h2>Exercise Finished!</h2>
-          <h2>Total Score: {finalScore}%</h2>
-          {/* You can add more content or components for the new page */}
+      
+      {!start ? (
+        // When exercise has not started, display a message or another component
+        <div>
+          <h2>Welcome! Please press "Start" to begin the exercise.</h2>
+          <button onClick={startExercise}>Start Exercise</button>
         </div>
       ) : (
-        // When exercise is not finished, show the video feed
-        <div style={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
-          <video
-            ref={videoRef}
-            style={{ width: '640px', height: '480px', border: '1px solid black' }}
-            autoPlay
-            muted
-          ></video>
-        </div>
+        // When exercise has started, render the video feed and score
+        <>
+          {/* Camera Feed */}
+          {exerciseFinished ? (
+            // When exercise is finished, show a new page (can be a message, component, etc.)
+            <div style={{ padding: '20px' }}>
+              <h2>Exercise Finished!</h2>
+              <h2>Total Score: {finalScore}%</h2>
+              {/* You can add more content or components for the new page */}
+            </div>
+          ) : (
+            // When exercise is not finished, show the video feed and counter
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
+              <video
+                ref={videoRef}
+                style={{ width: '640px', height: '480px', border: '1px solid black' }}
+                autoPlay
+                muted
+              ></video>
+              <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'white' }}>
+                Count: {counterDisplay}/10
+              </div>
+            </div>
+          )}
+        </>
       )}
 
       {/*Stick Figure Visualization*/}
@@ -425,9 +445,6 @@ const PoseDetection = ({ exercise }) => {
           height="0"
           style={{ border: '1px solid black' }}
         ></canvas>
-      </div>
-      <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'green' }}>
-        Count: {counterDisplay}/10
       </div>
     </div>
   );
