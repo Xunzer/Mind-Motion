@@ -2,6 +2,11 @@ import React, { useRef, useEffect, useCallback, useState } from 'react';
 import * as pose from '@mediapipe/pose';
 import * as cam from '@mediapipe/camera_utils';
 import Alert from '@mui/material/Alert';
+import Snackbar from "@mui/material/Snackbar";
+import knee_extension_gif from '../gifs/knee_extension.gif';
+import bicep_curl_gif from '../gifs/bicep_curl.gif'
+import open_arm_png from '../gifs/open_arm.png'
+import "./css/pose_detection.css";
 
 const PoseDetection = ({ exercise }) => {
   const videoRef = useRef(null);
@@ -9,7 +14,7 @@ const PoseDetection = ({ exercise }) => {
   const poseRef = useRef(null);
   let stage = "";
   let counter = 0;
-  let minAngle = 45;
+  let minAngle = 40;
   let score = 0;
   let totalScore = 0;
   let notAdded = false;
@@ -23,6 +28,55 @@ const PoseDetection = ({ exercise }) => {
   const [exerciseFinished, setExerciseFinished] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
   const [start, setStart] = useState(false);
+  const [instruction, setInstruction] = useState("");
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success"); // "success", "error", "warning", "info"
+  const lastFeedbackTime = useRef(0); // Track the last feedback time in milliseconds
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
+  const showThrottledFeedback = (message, severity = "success", throttleTime = 1500) => {
+    const currentTime = Date.now();
+    if (currentTime - lastFeedbackTime.current >= throttleTime) {
+      lastFeedbackTime.current = currentTime;
+      setSnackbarMessage(message);
+      setSnackbarSeverity(severity);
+      setSnackbarOpen(true);
+    }
+  };
+
+  const handleRepCompleteFeedback = () => {
+    showThrottledFeedback("Great rep! Keep going further!", "success", 2000); // Feedback every 3 seconds
+  };
+
+  const startExerciseFeedback = () => {
+    showThrottledFeedback("Start the new round by repeating the instruction", "info", 2000); // Feedback every 3 seconds
+  };
+
+  const keepElbowPinnedFeedback = () => {
+    showThrottledFeedback("Keep your elbow pinned to your side.", "error", 2000); // Feedback every 3 seconds
+  };
+
+  const handleCurlMoreFeedback = () => {
+    showThrottledFeedback("Curl more! Keep improving your form.", "warning", 2000); // Feedback every 3 seconds
+  };
+
+  const handleExtendMoreFeedback = () => {
+    showThrottledFeedback("Good job! Keep pushing!", "warning", 2000); // Feedback every 3 seconds
+  };
+
+  const handlePushMoreFeedback = () => { 
+    showThrottledFeedback("Push more! Keep improving your form.", "warning", 2000); // Feedback every
+  };
+  
+  const handleFinishFeedback = () => {
+    showThrottledFeedback("You finished this round, plese move to the initial position!", "success", 2000); // Feedback every 3 seconds
+  };
+  const [gifSrc, setGifSrc] = useState(null);
 
   // Memoize the onResults function to avoid re-creating it unnecessarily
   const onResults = useCallback((results) => {
@@ -39,6 +93,29 @@ const PoseDetection = ({ exercise }) => {
       }
     }
   }, []);
+
+  useEffect(() => {
+    // Update the gifSrc based on the exercise prop
+    if (exercise === 'rightKneeExtension') {
+      setGifSrc(knee_extension_gif);
+      setInstruction("Start seated with good posture. Extend your right leg to straighten the knee, contracting your quadriceps. Hold for 3 seconds, then slowly lower your foot back to the floor.")
+    } else if (exercise == 'leftKneeExtension') {
+      setGifSrc(knee_extension_gif);
+      setInstruction("Start seated with good posture. Extend your left leg to straighten the knee, contracting your quadriceps. Hold for 3 seconds, then slowly lower your foot back to the floor.")
+    } else if (exercise === 'rightBicepCurl') {
+      setGifSrc(bicep_curl_gif);
+      setInstruction("Start with your right elbow bent at 90 degrees. Curl your right hand towards your shoulder, then lower it. Repeat 10 times.")
+    } else if (exercise == 'leftBicepCurl') {
+      setGifSrc(bicep_curl_gif);
+      setInstruction("Start with your left elbow bent at 90 degrees. Curl your left hand towards your shoulder, then lower it. Repeat 10 times.")
+    } else if (exercise == "openArms") {
+      setGifSrc(open_arm_png)
+      setInstruction("Keep elbows close to your sides, open arms to your sides, then return to center. Repeat 10 times.")
+    }
+    else {
+      setGifSrc(null); // Default case, no gif
+    }
+  }, [exercise]); // Depend on exercise prop to update the gif
 
   useEffect(() => {
     // Initialize MediaPipe Pose
@@ -153,6 +230,7 @@ const PoseDetection = ({ exercise }) => {
       stage = "down";
       minAngle = 40;
       notAdded = true;
+      startExerciseFeedback();
     } else if (angle <= 40 && stage === "down") {
       stage = "up";
     } else if (angle <= 40 && stage === "up") {
@@ -171,11 +249,15 @@ const PoseDetection = ({ exercise }) => {
           totalScore += score;
           counter += 1;
           notAdded = false;
+          handleFinishFeedback();
           console.log("Total Score: " + totalScore);
           setCounterDisplay(prevCounterDisplay => prevCounterDisplay+ 1);
+        } else {
+          handleRepCompleteFeedback();
         }
       }
     } else if (angle > 40 && angle < 100 && stage === "down" ){
+      handleCurlMoreFeedback();
       console.log("curl more")
     }
     console.log("counter = " + counter);
@@ -198,18 +280,6 @@ const PoseDetection = ({ exercise }) => {
     ));
     console.log("Right knee extension Angle: " + rightKneeExtensionAngle);
     calculateKneeExtensionScore(rightKneeExtensionAngle)
-    // if (rightKneeExtensionAngle <= 110) {
-    //     stage = "down"
-    // } else if (rightKneeExtensionAngle >= 130 && stage === "down") {
-    //     stage = "up"
-    //     counter = counter + 1
-    //     console.log("good move! ")
-
-    // } else if (rightKneeExtensionAngle < 130 && rightKneeExtensionAngle > 110 && stage === "down" ){
-    //   console.log("extend more")
-    // } else if (rightKneeExtensionAngle < 130 && rightKneeExtensionAngle > 110 && stage === "up"){
-    //   console.log("returned to the initial position")
-    // }
     console.log("counter = " + counter);
 
     // Draw the angles on the canvas
@@ -235,22 +305,6 @@ const PoseDetection = ({ exercise }) => {
     ));
     console.log("Left Knee Extension Angle: " + leftKneeExtensionAngle);
     calculateKneeExtensionScore(leftKneeExtensionAngle)
-  //   if (leftKneeExtensionAngle <= 110) {
-  //     stage = "down";
-  //   } else if (leftKneeExtensionAngle >= 130 && stage === "down") {
-  //     stage = "up";
-  //     counter = counter + 1;
-  //     console.log("Good move!");
-  //   } else if (
-  //     leftKneeExtensionAngle < 130 &&
-  //     leftKneeExtensionAngle > 110 &&
-  //     stage === "down"
-  //   ) {
-  //     console.log("Extend more");
-  //   }
-  //  else if (leftKneeExtensionAngle < 130 && leftKneeExtensionAngle > 110 && stage === "up"){
-  //   console.log("retrive to the initial position")
-  // }
     console.log("Counter = " + counter);
   
     // Draw the angles on the canvas
@@ -263,12 +317,16 @@ const PoseDetection = ({ exercise }) => {
     ideal_rom = 160 // ideal range of motion (rom) for this exercise is 160 degrees (rough estimation).
     if (angle <= 110) {
       stage = "down";
+      startExerciseFeedback();
     } else if (angle >= 130 && stage === "down") {
       counter = counter + 1
       stage = "up";
       repComplete = true
+      handleExtendMoreFeedback();
       setCounterDisplay(prevCounterDisplay => prevCounterDisplay+ 1);
-    } 
+    } else if (angle >= 110 & angle < 130 && stage === "down") {
+      handlePushMoreFeedback();
+    }
     if (angle >= 130 && stage === "up" && repComplete) {
       console.log("ROM Score:", Math.round((angle / ideal_rom) * 100));
       // rom score = ((actual rom) / (ideal rom)) * 100
@@ -284,6 +342,7 @@ const PoseDetection = ({ exercise }) => {
         totalScore += 7
       }
       repComplete = false
+      handleFinishFeedback();
       console.log("counter = " + counter);
       console.log("rom_score for this rep = " + rom_score);
       console.log("current score = " + totalScore);
@@ -308,6 +367,7 @@ const PoseDetection = ({ exercise }) => {
     }
 
     if (!isElbowPinned(elbow, hip)){
+      keepElbowPinnedFeedback();
       console.log("Keep your elbow pinned to your side.");
       return;
     }
@@ -320,8 +380,11 @@ const PoseDetection = ({ exercise }) => {
       console.log("counter " + counter)
       minDistance = -0.18;
       notAdded = false;
+      handleExtendMoreFeedback();
+      console.log("stage = " + wristDistance)
     } else if (wristDistance < -0.18 && stage === "out") {
       minDistance = Math.min(minDistance, wristDistance);
+      handleExtendMoreFeedback();
     } else if (Math.abs(wristDistance) < 0.05 && stage === "out") {
       console.log("Forearm is moving outward.");
       stage = "in";
@@ -341,9 +404,12 @@ const PoseDetection = ({ exercise }) => {
         if (counter===10){
           finished = true;
         }
+      } else {
+        handleFinishFeedback();
       }
     } else if (Math.abs(wristDistance) < 0.05){
       stage = "in";
+      startExerciseFeedback();
     };
 
     console.log("counter = " + counter);
@@ -405,9 +471,10 @@ const PoseDetection = ({ exercise }) => {
       
       {!start ? (
         // When exercise has not started, display a message or another component
-        <div>
-          <h2 style={{ color: 'white' }}>Welcome! Please press "Start" to begin the exercise.</h2>
-          <button onClick={startExercise}>Start Exercise</button>
+        <div className = "instruction_page">
+          <h2>{instruction}</h2>
+          {gifSrc && <img src={gifSrc} alt={exercise} style={{ width: '600px', height: 'auto' }} />}
+          <button className="start-exercise-button" onClick={startExercise}>Start Exercise</button>
         </div>
       ) : (
         // When exercise has started, render the video feed and score
@@ -436,6 +503,37 @@ const PoseDetection = ({ exercise }) => {
           )}
         </>
       )}
+
+    <Snackbar
+      open={snackbarOpen}
+      autoHideDuration={4000} // Increased duration to give more time to read
+      onClose={handleSnackbarClose}
+      anchorOrigin={{ vertical: "top", horizontal: "center" }}
+    >
+      <Alert
+        onClose={handleSnackbarClose}
+        severity={snackbarSeverity}
+        sx={{
+          width: "100%",
+          fontSize: "1rem", // Increased font size for better readability
+          fontWeight: "bold", // Make text bolder for emphasis
+          padding: "15px", // Add more padding for spacious content
+          borderRadius: "10px", // Rounded corners for a modern look
+          lineHeight: "1.5", // Improved line spacing for readability
+          boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)", // Add shadow for emphasis
+          backgroundColor: "#1e1e1e", // Softer background color for comfort
+          color: "#f5f5f5", // Dark text color for better contrast
+          "& .MuiAlert-icon": {
+            fontSize: "1.5rem", // Larger icon size for easier recognition
+          },
+          "& .MuiAlert-action": {
+            alignItems: "center",
+          },
+        }}
+      >
+        {snackbarMessage}
+      </Alert>
+    </Snackbar>
 
       {/*Stick Figure Visualization*/}
       <div style={{ position: 'relative' }}>
