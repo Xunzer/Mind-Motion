@@ -7,7 +7,6 @@ import DashboardLayoutBasic from './dashboard';
 
 import './App.css';
 import PoseDetection from './pose_detection/pose_detection';
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 
 const App = () => {
   return (

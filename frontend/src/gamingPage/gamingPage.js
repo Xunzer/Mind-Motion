@@ -22,10 +22,13 @@ import Looks3Icon from '@mui/icons-material/Looks3';
 import TimerIcon from '@mui/icons-material/Timer';
 import SportsScoreIcon from '@mui/icons-material/SportsScore';
 import "./css/gamingPage.css";
+import PoseDetection from "../pose_detection/pose_detection"; // Import the PoseDetection component
+import { useState } from 'react';
 
 const GamingPage = () => {
   const drawerWidth = 240;
   const navigate = useNavigate(); // For navigating back
+  const [currentStage, setCurrentStage] = useState(null); // State to track the currently rendered stage
 
   const theme = createTheme({
     palette: {
@@ -55,6 +58,7 @@ const GamingPage = () => {
   }));
 
   const goToStage1 = () => {
+    setCurrentStage("Stage1")
 
   };
 
@@ -64,6 +68,19 @@ const GamingPage = () => {
 
   const goToStage3 = () => {
 
+  };
+
+  const renderStageContent = () => {
+    switch (currentStage) {
+      case 'Stage1':
+        return <PoseDetection />; // Render PoseDetection component for Stage 1
+      case 'Stage2':
+        return <div>Stage 2 Content</div>; // Placeholder for Stage 2 content
+      case 'Stage3':
+        return <div>Stage 3 Content</div>; // Placeholder for Stage 3 content
+      default:
+        return <Typography>Select a stage from the menu.</Typography>;
+    }
   };
 
   const returnDashboard = () => {
@@ -149,8 +166,7 @@ const GamingPage = () => {
         </Typography>
         <Box sx={{ }}>
         <div className="video-container">
-          <video src=''> 
-          </video>
+          {renderStageContent()}
         </div>
         <Typography sx={{marginTop: "20px", textAlign: 'center'}}>
           Stage description
