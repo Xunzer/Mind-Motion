@@ -192,3 +192,5 @@ yarn-debug.log*
 yarn-error.log*
 
 package-json.lock
+
+.history/

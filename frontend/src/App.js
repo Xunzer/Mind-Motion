@@ -1,25 +1,24 @@
 import logo from './logo.svg';
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import GamingPage from './gamingPage/gamingPage';
+import SignUpPage from "./signUpPage/signUpPage"
+import IntroPage from "./introPage/introPage"
+import DashboardLayoutBasic from "./dashboard/dashboard";
 import './App.css';
+import PoseDetection from './pose_detection/pose_detection';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Navigate to="/intro" />} />
+        <Route path="/exercise" element={<GamingPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/intro" element={<IntroPage />} />
+        <Route path="/dashboard" element={<DashboardLayoutBasic />} />
+        <Route path="/pose_detection" element={<PoseDetection/>} />
+      </Routes>
+    </Router>
   );
-}
-
+};
 export default App;
