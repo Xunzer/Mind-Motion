@@ -16,6 +16,8 @@ import { useTheme } from '@mui/material/styles'; // Import useTheme to access th
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import logoImage from './assets/logo.jpg';
+import { Dialog, DialogContent, DialogContentText } from '@mui/material';
+import { useState, useEffect } from 'react';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -67,94 +69,173 @@ function useDemoRouter(initialPath) {
 
 const ProfilePage = () => (
     <PageContainer>
-    <Paper elevation={3} style={{ padding: 24 }}>
+      <Paper elevation={3} style={{ padding: 24 }}>
         <Grid container spacing={3} alignItems="center">
-        <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={4}>
             <Avatar
-            alt="User Name"
-            src = {logoImage}
-            style={{ width: 128, height: 128, margin: 'auto' }}
+              alt="User Name"
+              src={logoImage}
+              style={{ width: 128, height: 128, margin: 'auto' }}
             />
-        </Grid>
-        <Grid item xs={12} md={8}>
+          </Grid>
+          <Grid item xs={12} md={8}>
             <Typography variant="h5">Mike Jattu</Typography>
             <Typography variant="body1" color="textSecondary">
-            sjattu@ualberta.ca
+              sjattu@ualberta.ca
             </Typography>
             <Typography variant="body2" color="textSecondary">
-            Role: User
+              Role: User
             </Typography>
-            <Button variant="contained" color="primary" style={{ marginTop: 16 }}>
-            Edit Profile
-            </Button>
+            <Grid container spacing={2} alignItems="center" style={{ marginTop: 16 }}>
+              <Grid item>
+                <Button variant="contained" color="primary">
+                  Edit Profile
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button variant="contained" color="primary">
+                  Sign Out
+                </Button>
+              </Grid>
+            </Grid>
+          </Grid>
         </Grid>
-        </Grid>
-    </Paper>
+      </Paper>
     </PageContainer>
-);
-const DashboardContent = () => {
-    const theme = useTheme(); // Access the current theme
-
+  );
+  const DashboardContent = () => {
+    const theme = useTheme();
+  
     const levels = [
-    { name: 'Level 1', color: 'primary' },
-    { name: 'Level 2', color: 'grey' },
-    { name: 'Level 3', color: 'grey' },
-    { name: 'Level 4', color: 'grey' },
-    { name: 'Level 5', color: 'grey' },
-    { name: 'Level 6', color: 'grey' },
+      { name: 'Level 1', color: 'primary' },
+      { name: 'Level 2', color: 'grey' },
+      { name: 'Level 3', color: 'grey' },
+      { name: 'Level 4', color: 'grey' },
+      { name: 'Level 5', color: 'grey' },
+      { name: 'Level 6', color: 'grey' },
     ];
-
-  const waveOffsets = [0, 40, -40, 40, -40, 40]; // Wave pattern for vertical effect
-
-  // Use the grey palette from the theme to ensure it's responsive to both light and dark mode
-  const greyColor = theme.palette.grey[500]; // grey.500 is a neutral grey color for both modes
-
+  
+    const waveOffsets = [0, 40, -40, 40, -40, 40];
+    const greyColor = theme.palette.grey[500];
+  
+    // Animation keyframes
+    const hopAnimation = `
+      @keyframes hop {
+        0%, 100% {
+          transform: translate(-50%, 0);
+        }
+        50% {
+          transform: translate(-50%, -20px);
+        }
+      }
+    `;
+  
+    // Inject animation styles into the document head
+    React.useEffect(() => {
+      const style = document.createElement('style');
+      style.innerHTML = hopAnimation;
+      document.head.appendChild(style);
+      return () => {
+        document.head.removeChild(style);
+      };
+    }, [hopAnimation]);
+  
+    // Determine tooltip colors dynamically based on theme mode
+    const tooltipBackgroundColor =
+      theme.palette.mode === 'dark' ? theme.palette.grey[800] : theme.palette.background.paper;
+    const tooltipTextColor =
+      theme.palette.mode === 'dark' ? theme.palette.grey[300] : theme.palette.primary.main;
+  
     return (
-    <PageContainer>
+      <PageContainer>
         <Grid
-        container
-        spacing={3}
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
-        style={{ minHeight: '80vh' }} // Center vertically on the page
+          container
+          spacing={3}
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+          style={{ minHeight: '80vh' }}
         >
-        {levels.map((level, index) => (
+          {levels.map((level, index) => (
             <Grid
-            item
-            key={index}
-            style={{
-              transform: `translateX(${waveOffsets[index]}px)`, // Apply horizontal offset for vertical wave
-            }}
+              item
+              key={index}
+              style={{
+                transform: `translateX(${waveOffsets[index]}px)`,
+                position: 'relative',
+              }}
             >
-            <Button
+              {index === 0 && (
+                // Hopping Tooltip for "Start Exercising"
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '-70px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    animation: 'hop 1.5s infinite',
+                    zIndex: 2,
+                    textAlign: 'center',
+                  }}
+                >
+                  <div
+                    style={{
+                      position: 'relative',
+                      background: tooltipBackgroundColor, // Dynamic background color
+                      color: tooltipTextColor, // Dynamic text color
+                      padding: '6px 12px',
+                      borderRadius: '8px',
+                      fontWeight: 'bold',
+                      fontSize: '0.9rem',
+                      boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
+                    }}
+                  >
+                    Start Exercising
+                    <div
+                      style={{
+                        position: 'absolute',
+                        width: 0,
+                        height: 0,
+                        borderLeft: '6px solid transparent',
+                        borderRight: '6px solid transparent',
+                        borderTop: `6px solid ${tooltipBackgroundColor}`, // Match arrow with background
+                        bottom: '-6px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+  
+              <Button
                 variant="contained"
                 style={{
-                backgroundColor: level.color === 'grey' ? greyColor : theme.palette[level.color].main, // Apply grey or the primary color
-                width: 140, // Larger width
-                height: 140, // Larger height
-                borderRadius: '50%',
-                fontSize: '1.2rem',
-                boxShadow: '0px 6px 15px rgba(0, 0, 0, 0.2)',
-                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                  backgroundColor: level.color === 'grey' ? greyColor : theme.palette[level.color].main,
+                  width: 140,
+                  height: 140,
+                  borderRadius: '50%',
+                  fontSize: '1.2rem',
+                  boxShadow: '0px 6px 15px rgba(0, 0, 0, 0.2)',
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                 }}
                 onMouseOver={(e) => {
-                e.target.style.transform = 'scale(1.2)';
-                e.target.style.boxShadow = '0px 8px 20px rgba(0, 0, 0, 0.4)';
+                  e.target.style.transform = 'scale(1.2)';
+                  e.target.style.boxShadow = '0px 8px 20px rgba(0, 0, 0, 0.4)';
                 }}
                 onMouseOut={(e) => {
-                e.target.style.transform = 'scale(1)';
-                e.target.style.boxShadow = '0px 6px 15px rgba(0, 0, 0, 0.2)';
+                  e.target.style.transform = 'scale(1)';
+                  e.target.style.boxShadow = '0px 6px 15px rgba(0, 0, 0, 0.2)';
                 }}
-            >
+              >
                 {level.name}
-            </Button>
+              </Button>
             </Grid>
-        ))}
+          ))}
         </Grid>
-    </PageContainer>
+      </PageContainer>
     );
-};
+  };
 
 const ReportsPage = () => {
     const dailyExerciseData = {
