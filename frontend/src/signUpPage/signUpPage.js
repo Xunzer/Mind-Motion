@@ -19,7 +19,7 @@ export default function SignUpPage() {
   const [darkMode, setDarkMode] = useState(false);
   const theme = createTheme({
     palette: {
-      mode:  darkMode ? 'dark' : "light"
+      mode:  darkMode ? "light" : 'dark'
     },
   });
 
