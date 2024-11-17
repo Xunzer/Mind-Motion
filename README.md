@@ -26,5 +26,5 @@ The platform offers a supportive digital environment where patients can perform 
 | Zongxin Liu   |
 | Weihang Zhou  |
 | Rongjia Liu   |
-| Row 6 Content |
+| Mike Jattu |
 
