@@ -2,6 +2,8 @@ import React, { useRef, useEffect, useCallback, useState } from 'react';
 import * as pose from '@mediapipe/pose';
 import * as cam from '@mediapipe/camera_utils';
 import Alert from '@mui/material/Alert';
+import knee_extension_gif from '../gifs/knee_extension.gif';
+import bicep_curl_gif from '../gifs/bicep_curl.gif'
 
 const PoseDetection = ({ exercise }) => {
   const videoRef = useRef(null);
@@ -23,6 +25,7 @@ const PoseDetection = ({ exercise }) => {
   const [exerciseFinished, setExerciseFinished] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
   const [start, setStart] = useState(false);
+  const [gifSrc, setGifSrc] = useState(null);
 
   // Memoize the onResults function to avoid re-creating it unnecessarily
   const onResults = useCallback((results) => {
@@ -39,6 +42,24 @@ const PoseDetection = ({ exercise }) => {
       }
     }
   }, []);
+
+  useEffect(() => {
+    // Update the gifSrc based on the exercise prop
+    if (exercise === 'rightKneeExtension') {
+      setGifSrc(knee_extension_gif);
+    } else if (exercise == 'leftKneeExtension') {
+      setGifSrc(knee_extension_gif);
+    } else if (exercise === 'rightBicepCurl') {
+      setGifSrc(bicep_curl_gif);
+    } else if (exercise == 'leftBicepCurl') {
+      setGifSrc(bicep_curl_gif);
+    } else if (exercise == "openArms") {
+      setGifSrc(null)
+    }
+    else {
+      setGifSrc(null); // Default case, no gif
+    }
+  }, [exercise]); // Depend on exercise prop to update the gif
 
   useEffect(() => {
     // Initialize MediaPipe Pose
@@ -407,6 +428,7 @@ const PoseDetection = ({ exercise }) => {
         // When exercise has not started, display a message or another component
         <div>
           <h2>Welcome! Please press "Start" to begin the exercise.</h2>
+          {gifSrc && <img src={gifSrc} alt={exercise} style={{ width: '600px', height: 'auto' }} />}
           <button onClick={startExercise}>Start Exercise</button>
         </div>
       ) : (
