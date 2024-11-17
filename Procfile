@@ -1,1 +1,1 @@
-web: gunicorn Mind-Motion.wsgi
+web: gunicorn backend.wsgi
