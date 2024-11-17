@@ -24,6 +24,8 @@ import SportsScoreIcon from '@mui/icons-material/SportsScore';
 import "./css/gamingPage.css";
 import PoseDetection from "../pose_detection/pose_detection"; // Import the PoseDetection component
 import { useState } from 'react';
+import Looks4Icon from '@mui/icons-material/Looks4';
+import Looks5Icon from '@mui/icons-material/Looks5';
 
 const GamingPage = () => {
   const drawerWidth = 240;
@@ -63,23 +65,48 @@ const GamingPage = () => {
   };
 
   const goToStage2 = () => {
+    setCurrentStage("Stage2")
 
   };
 
   const goToStage3 = () => {
+    setCurrentStage("Stage3")
 
   };
+
+  const goToStage4 = () => {
+    setCurrentStage("Stage4")
+
+  };
+
+  const goToStage5 = () => {
+    setCurrentStage("Stage5")
+
+  };
+
+  const exerciseNames = {
+    Stage1: "Right Bicep Curl",
+    Stage2: "Left Bicep Curl",
+    Stage3: "Right Knee Extension",
+    Stage4: "Left Knee Extension",
+    Stage5: "Open Arms"
+  };
+
 
   const renderStageContent = () => {
     switch (currentStage) {
       case 'Stage1':
-        return <PoseDetection />; // Render PoseDetection component for Stage 1
+        return <PoseDetection key="Stage1" exercise="rightBicepCurl" />;
       case 'Stage2':
-        return <div>Stage 2 Content</div>; // Placeholder for Stage 2 content
+        return <PoseDetection key="Stage2" exercise="leftBicepCurl" />;
       case 'Stage3':
-        return <div>Stage 3 Content</div>; // Placeholder for Stage 3 content
+        return <PoseDetection key="Stage3" exercise="rightKneeExtension" />;
+      case 'Stage4':
+        return <PoseDetection key="Stage4" exercise="leftKneeExtension" />;
+      case 'Stage5':
+        return <PoseDetection key="Stage5" exercise="openArms" />;
       default:
-        return <Typography>Select a stage from the menu.</Typography>;
+        return <Typography>Please Exercise 1 to Start!</Typography>;
     }
   };
 
@@ -152,6 +179,24 @@ const GamingPage = () => {
               <ListItemText primary="Exercise 3" primaryTypographyProps={{ style: text }} />
             </ListItemButton>
           </ListItem>
+
+          <ListItem disablePadding sx={{ display: 'block', marginTop: "10px", marginBottom: "10px"  }} className="nav_bar_button">
+            <ListItemButton onClick={goToStage4} sx={{ minHeight: 48, px: 2.5, justifyContent: 'initial' }}>
+              <ListItemIcon sx={{ minWidth: 0, justifyContent: 'center', mr: 3 }}>
+                <Looks4Icon sx={{  }}/>
+              </ListItemIcon>
+              <ListItemText primary="Exercise 4" primaryTypographyProps={{ style: text }} />
+            </ListItemButton>
+          </ListItem>
+
+          <ListItem disablePadding sx={{ display: 'block', marginTop: "10px", marginBottom: "10px"  }} className="nav_bar_button">
+            <ListItemButton onClick={goToStage5} sx={{ minHeight: 48, px: 2.5, justifyContent: 'initial' }}>
+              <ListItemIcon sx={{ minWidth: 0, justifyContent: 'center', mr: 3 }}>
+                <Looks5Icon sx={{  }}/>
+              </ListItemIcon>
+              <ListItemText primary="Exercise 5" primaryTypographyProps={{ style: text }} />
+            </ListItemButton>
+          </ListItem>
           <Divider />
         </List>
 
@@ -162,7 +207,7 @@ const GamingPage = () => {
       >
         <Toolbar />
         <Typography sx={{ marginBottom: 2, textAlign: 'center', fontWeight: 'bold' }}>
-          Stage
+          {exerciseNames[currentStage]}
         </Typography>
         <Box sx={{ }}>
         <div className="video-container">
@@ -188,17 +233,9 @@ const GamingPage = () => {
         <Toolbar />
         <Divider />
         <List>
-          <ListItem disablePadding sx={{ display: 'block', marginTop: "10px", marginBottom: "10px"  }} className="nav_bar_button">
-            <ListItemButton onClick={goToStage1} sx={{ minHeight: 48, px: 2.5, justifyContent: 'initial' }}>
-              <ListItemIcon sx={{ minWidth: 0, justifyContent: 'center', mr: 3 }}>
-                <TimerIcon sx={{  }}/>
-              </ListItemIcon>
-              <ListItemText primary="Time" primaryTypographyProps={{ style: text }} />
-            </ListItemButton>
-          </ListItem>
 
           <ListItem disablePadding sx={{ display: 'block', marginTop: "10px", marginBottom: "10px"  }} className="nav_bar_button">
-            <ListItemButton onClick={goToStage2}sx={{ minHeight: 48, px: 2.5, justifyContent: 'initial' }}>
+            <ListItemButton sx={{ minHeight: 48, px: 2.5, justifyContent: 'initial' }}>
               <ListItemIcon sx={{ minWidth: 0, justifyContent: 'center', mr: 3 }}>
                 <SportsScoreIcon sx={{  }} />
               </ListItemIcon>

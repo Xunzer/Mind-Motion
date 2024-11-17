@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useCallback, useState } from 'react';
 import * as pose from '@mediapipe/pose';
 import * as cam from '@mediapipe/camera_utils';
 
-const PoseDetection = () => {
+const PoseDetection = ({ exercise }) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const poseRef = useRef(null);
@@ -27,7 +27,11 @@ const PoseDetection = () => {
 
     if (results.poseLandmarks) {
       drawStickFigure(results.poseLandmarks, canvasCtx);
-      openArms(results.poseLandmarks, canvasCtx); // change function to test
+      if (exerciseFunctions[exercise]) {
+        exerciseFunctions[exercise](results.poseLandmarks, canvasCtx);
+      } else {
+        console.warn(`No function defined for stage: ${stage}`);
+      }
     }
   }, []);
 
@@ -356,6 +360,13 @@ const PoseDetection = () => {
     return angleHistory.reduce((sum, angle) => sum + angle, 0) / angleHistory.length; // Take the average of the last 5 recorded angles and return it
   };
 
+  const exerciseFunctions = {
+    rightBicepCurl,
+    leftBicepCurl,
+    rightKneeExtension,
+    leftKneeExtension,
+    openArms,
+  };
 
 
 
