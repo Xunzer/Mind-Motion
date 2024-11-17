@@ -138,12 +138,17 @@ const IntroPage = () => {
           sx={{
             padding: '10px 30px',
             fontSize: '1rem',
-            background: 'linear-gradient(90deg, #64b5f6, #42a5f5)', // Gradient button
+            background: 'rgba(100, 181, 246, 0.5)', // Transparent background
             borderRadius: '30px',
-            boxShadow: '0 4px 10px rgba(0, 0, 0, 0.3)',
+            boxShadow: '0 4px 10px rgba(0, 0, 0, 0.3)', // Subtle shadow
+            color: '#fff',
             '&:hover': {
-              background: 'linear-gradient(90deg, #42a5f5, #64b5f6)',
+              background: 'rgba(66, 165, 245, 0.8)', // Slightly less transparent on hover
+              boxShadow: '0 0 20px 5px rgba(100, 181, 246, 0.7)', // Glowing effect
+              transform: 'scale(1.05)', // Slightly enlarge
             },
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease',
+            backdropFilter: 'blur(5px)', // Adds a blurred background effect
           }}
           onClick={navigateToSignUp}
         >
