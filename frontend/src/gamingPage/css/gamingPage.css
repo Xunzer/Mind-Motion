@@ -1,9 +1,6 @@
-.stage-title {
-  font-weight: bold;
-}
-
 .video-container {
   position: relative;
+  animation: fadeIn 1s ease-in-out;
   border-radius: 15px; /* Adjust the radius as needed */
   display: flex;
   justify-content: center;
@@ -27,3 +24,7 @@ video {
   display: none;
 }
 
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}

@@ -71,7 +71,7 @@ function useDemoRouter(initialPath) {
 
 const ProfilePage = () => (
     <PageContainer>
-      <Paper elevation={3} style={{ padding: 24 }}>
+      <Paper elevation={3} style={{ padding: 24, animation: 'fadeIn 1s ease-out' }}>
         <Grid container spacing={3} alignItems="center">
           <Grid item xs={12} md={4}>
             <Avatar
@@ -132,6 +132,17 @@ const ProfilePage = () => (
         }
       }
     `;
+
+    const fadeInAnimation = `
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+    `;
   
     // Inject animation styles into the document head
     React.useEffect(() => {
@@ -157,7 +168,8 @@ const ProfilePage = () => (
           direction="column"
           justifyContent="center"
           alignItems="center"
-          style={{ minHeight: '80vh' }}
+          style={{ minHeight: '80vh', animation: 'fadeIn 2s ease-out' }}
+          
         >
           {levels.map((level, index) => (
             <Grid
@@ -279,7 +291,7 @@ const ReportsPage = () => {
         </Typography>
 
         {/* Bar Chart */}
-        <div style={{ height: '400px', width: '100%' }}>
+        <div style={{ height: '400px', width: '100%', animation: 'fadeIn 1s ease-out' }}>
             <Bar data={dailyExerciseData} options={options} />
         </div>
         </Paper>
