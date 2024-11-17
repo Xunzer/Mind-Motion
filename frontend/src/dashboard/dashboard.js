@@ -42,18 +42,21 @@ const NAVIGATION = [
 ];
 
 const demoTheme = extendTheme({
-    colorSchemes: { light: true, dark: true },
-    colorSchemeSelector: 'class',
+  colorSchemes: { light: true, dark: true },
+  colorSchemeSelector: 'class',
+  palette: {
+      mode: 'dark',  // Set the mode to dark by default
+  },
   breakpoints: {
-    values: {
-        xs: 0,
-        sm: 600,
-        md: 600,
-        lg: 1200,
-        xl: 1536,
-    },
-    },
-});
+      values: {
+          xs: 0,
+          sm: 600,
+          md: 600,
+          lg: 1200,
+          xl: 1536,
+      },
+  },
+}); 
 
 function useDemoRouter(initialPath) {
     const [pathname, setPathname] = React.useState(initialPath);
