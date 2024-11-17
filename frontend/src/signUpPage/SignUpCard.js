@@ -122,14 +122,14 @@ export default function SignUpCard({signUpToSignInTransition}) {
         }}
       >
         <Typography variant="h3" fontWeight="bold">
-          Welcome to <span style={{ color: '#1976d2' }}>Motion & Mind</span>
+          Welcome to <span style={{ color: '#1976d2' }}>Mind & Motion</span>
         </Typography>
         <Divider />
         <Divider />
         
 
         <Typography variant="body1" color="textSecondary">
-            Motion & Mind transforms recovery into an empowering and engaging journey.
+        Mind & Motion transforms recovery into an empowering and engaging journey.
             
         </Typography>
 
