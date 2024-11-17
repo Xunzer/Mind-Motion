@@ -19,33 +19,56 @@ import ListItemText from '@mui/material/ListItemText';
 import LooksOneIcon from '@mui/icons-material/LooksOne';
 import LooksTwoIcon from '@mui/icons-material/LooksTwo';
 import Looks3Icon from '@mui/icons-material/Looks3';
-import TimerIcon from '@mui/icons-material/Timer';
-import SportsScoreIcon from '@mui/icons-material/SportsScore';
 import "./css/gamingPage.css";
 import PoseDetection from "../pose_detection/pose_detection"; // Import the PoseDetection component
 import { useState } from 'react';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 import Looks4Icon from '@mui/icons-material/Looks4';
 import Looks5Icon from '@mui/icons-material/Looks5';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import AppLogo from '../assets/app_logo.png';
 
 const GamingPage = () => {
   const drawerWidth = 240;
   const navigate = useNavigate(); // For navigating back
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const [mode, setMode] = useState(prefersDarkMode || true); // Default to dark mode
   const [currentStage, setCurrentStage] = useState(null); // State to track the currently rendered stage
 
   const theme = createTheme({
     palette: {
-      mode: 'dark',
+      mode: mode ? "dark" : "light",
     },
     components: {
       MuiCssBaseline: {
         styleOverrides: {
-          body: {
-            backgroundImage: `linear-gradient(135deg, #0a1e3a 50%, #152a45 50%)`,
-          },
+          body: mode
+            ? {
+                backgroundImage: `linear-gradient(135deg, #0a1e3a 50%, #152a45 50%)`,
+                height: '100%',
+                minHeight: '100vh',
+                margin: 0, // Remove any default margin
+                padding: 0,
+              }
+            : {
+              height: '100%',
+              minHeight: '100vh',
+              margin: 0, // Remove any default margin
+              padding: 0,
+              }, // No styles for light mode
         },
       },
     },
   });
+
+  const handleChange = () => {
+    if (mode) {
+      setMode(false);
+    } else {
+      setMode(true);
+    }
+  };
 
   const text = {
     fontWeight: 'bold'
@@ -106,7 +129,7 @@ const GamingPage = () => {
       case 'Stage5':
         return <PoseDetection key="Stage5" exercise="openArms" />;
       default:
-        return <Typography>Please Exercise 1 to Start!</Typography>;
+        return <Typography style={{ color: 'white' }}>Press Exercise 1 to Start!</Typography>;
     }
   };
 
@@ -124,9 +147,17 @@ const GamingPage = () => {
         sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
       >
         <Toolbar>
-          <Typography variant="h6" noWrap component="div">
-            Mind & Motion
-          </Typography>
+        <img
+            src={AppLogo}
+            alt="Logo"
+            style={{ height: '40px', cursor: 'pointer' }} // Style as needed
+            onClick={() => navigate('/')} // Optional: Navigate to home on click
+          />
+          <Box sx={{ marginLeft: 'auto' }}>
+            <IconButton onClick={handleChange} color="inherit">
+              {mode ? <LightModeIcon /> : <DarkModeIcon />}
+            </IconButton>
+          </Box>
         </Toolbar>
       </AppBar>
       <Drawer

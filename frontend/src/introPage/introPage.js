@@ -1,6 +1,6 @@
 import React from 'react';
 import './css/introPage.css';
-import logo from '../assets/image.png'; // Update to match the actual file name
+import logo from '../assets/app_logo.png'; // Update to match the actual file name
 import { Box, Typography, Button } from '@mui/material';
 import { FitnessCenter, Timeline, EmojiEvents, TrackChanges } from '@mui/icons-material';
 import { useNavigate } from "react-router-dom";
