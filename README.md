@@ -1,2 +1,1 @@
-
-![default-logo-high-resolution-logo-transparent](https://github.com/user-attachments/assets/4cb72d3d-0bb2-48a5-83e7-108af2f11255)
+![output-onlinepngtools (1)](https://github.com/user-attachments/assets/c7d85efe-59aa-41ef-910a-93390a05368a)
