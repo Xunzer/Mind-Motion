@@ -22,9 +22,9 @@ The platform offers a supportive digital environment where patients can perform 
 | Project Members     |
 |---------------|
 | Anthony Mirza |
-| Tina Nguyen |
-| Zongxin Liu|
-| Row 4 Content |
+| Tina Nguyen   |
+| Zongxin Liu   |
+| weihang zhou  |
 | Row 5 Content |
 | Row 6 Content |
 
