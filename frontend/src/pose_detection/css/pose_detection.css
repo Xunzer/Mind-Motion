@@ -1,41 +1,44 @@
 .instruction_page {
-    display: grid; /* Use CSS Grid layout */
-    grid-template-columns: repeat(3, 1fr); /* Create three columns with equal width */
-    align-items: center; /* Center content vertically */
-    justify-items: center; /* Center content horizontally */
-    gap: 20px; /* Space between the grid items */
-    height: 100vh; /* Full viewport height to center content */
-    padding: 20px; /* Optional padding for the container */
+    display: grid;
+    grid-template-columns: 2fr; /* 1 column layout for compactness */
+    align-items: center;
+    justify-items: center;
+    gap: 10px; /* Reduce the gap between elements */
+    padding: 10px; /* Less padding around the grid */
+    height: auto; /* Allow the height to adjust based on content */
+    width: auto; /* Allow the width to adjust based on content */
+    max-width: 400px; /* Limit the width to a smaller size */
+    margin: 0 auto; /* Center the page horizontally */
   }
   
   .instruction_page h2 {
-    grid-column: span 3; /* Make the heading span across all columns */
-    text-align: center; /* Center text horizontally */
-    font-size: 1.5rem; /* Adjust font size */
-    margin-bottom: 20px; /* Add spacing below the heading */
+    grid-column: span 2; /* Heading spans across 1 column */
+    text-align: center;
+    font-size: 1.2rem; /* Smaller font size */
+    margin-bottom: 10px; /* Smaller margin below heading */
   }
   
   .instruction_page img {
-    grid-column: span 3; /* Make the image span across all columns */
-    width: 100%; /* Ensure the image scales within the grid */
-    max-width: 600px; /* Set a max width */
+    grid-column: span 2; /* Image spans across 1 column */
+    width: 100%; /* Scale image to fit the container */
+    max-width: 400px; /* Limit image width */
     height: auto; /* Maintain aspect ratio */
   }
   
   .start-exercise-button {
-    grid-column: span 3; /* Make the button span across all columns */
-    background-color: #4CAF50; /* Green background */
-    color: white; /* White text */
-    font-size: 1rem; /* Font size */
-    font-weight: bold; /* Bold text */
-    padding: 10px 20px; /* Padding */
-    border: none; /* Remove border */
-    border-radius: 5px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */
-    transition: background-color 0.3s ease; /* Smooth background color transition */
-    text-align: center; /* Center text */
+    grid-column: span 2; /* Button spans across 1 column */
+    background-color: #4CAF50;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 8px 16px; /* Reduce padding */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
   }
   
   .start-exercise-button:hover {
-    background-color: #45a049; /* Darker green when hovered */
+    background-color: #45a049;
   }
