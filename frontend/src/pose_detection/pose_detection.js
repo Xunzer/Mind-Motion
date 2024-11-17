@@ -13,7 +13,7 @@ const PoseDetection = ({ exercise }) => {
   const poseRef = useRef(null);
   let stage = "";
   let counter = 0;
-  let minAngle = 45;
+  let minAngle = 40;
   let score = 0;
   let totalScore = 0;
   let notAdded = false;
@@ -48,16 +48,28 @@ const PoseDetection = ({ exercise }) => {
     }
   };
 
-  const handleCurlMoreFeedback = () => {
-    showThrottledFeedback("Curl more! Keep improving your form.", "warning", 2000); // Feedback every 3 seconds
-  };
-
   const handleRepCompleteFeedback = () => {
     showThrottledFeedback("Great rep! Keep going further!", "success", 2000); // Feedback every 3 seconds
   };
 
   const startExerciseFeedback = () => {
-    showThrottledFeedback("Start the exercise by curling.", "info", 2000); // Feedback every 3 seconds
+    showThrottledFeedback("Start the new round by repeating the instruction", "info", 2000); // Feedback every 3 seconds
+  };
+
+  const keepElbowPinnedFeedback = () => {
+    showThrottledFeedback("Keep your elbow pinned to your side.", "error", 2000); // Feedback every 3 seconds
+  };
+
+  const handleCurlMoreFeedback = () => {
+    showThrottledFeedback("Curl more! Keep improving your form.", "warning", 2000); // Feedback every 3 seconds
+  };
+
+  const handleExtendMoreFeedback = () => {
+    showThrottledFeedback("Good job! Keep pushing!", "warning", 2000); // Feedback every 3 seconds
+  };
+
+  const handleFinishFeedback = () => {
+    showThrottledFeedback("You finished this round, plese move to the initial position!", "success", 2000); // Feedback every 3 seconds
   };
   const [gifSrc, setGifSrc] = useState(null);
 
@@ -232,10 +244,12 @@ const PoseDetection = ({ exercise }) => {
           totalScore += score;
           counter += 1;
           notAdded = false;
+          handleFinishFeedback();
           console.log("Total Score: " + totalScore);
           setCounterDisplay(prevCounterDisplay => prevCounterDisplay+ 1);
+        } else {
+          handleRepCompleteFeedback();
         }
-        handleRepCompleteFeedback();
       }
     } else if (angle > 40 && angle < 100 && stage === "down" ){
       handleCurlMoreFeedback();
@@ -261,18 +275,6 @@ const PoseDetection = ({ exercise }) => {
     ));
     console.log("Right knee extension Angle: " + rightKneeExtensionAngle);
     calculateKneeExtensionScore(rightKneeExtensionAngle)
-    // if (rightKneeExtensionAngle <= 110) {
-    //     stage = "down"
-    // } else if (rightKneeExtensionAngle >= 130 && stage === "down") {
-    //     stage = "up"
-    //     counter = counter + 1
-    //     console.log("good move! ")
-
-    // } else if (rightKneeExtensionAngle < 130 && rightKneeExtensionAngle > 110 && stage === "down" ){
-    //   console.log("extend more")
-    // } else if (rightKneeExtensionAngle < 130 && rightKneeExtensionAngle > 110 && stage === "up"){
-    //   console.log("returned to the initial position")
-    // }
     console.log("counter = " + counter);
 
     // Draw the angles on the canvas
@@ -298,22 +300,6 @@ const PoseDetection = ({ exercise }) => {
     ));
     console.log("Left Knee Extension Angle: " + leftKneeExtensionAngle);
     calculateKneeExtensionScore(leftKneeExtensionAngle)
-  //   if (leftKneeExtensionAngle <= 110) {
-  //     stage = "down";
-  //   } else if (leftKneeExtensionAngle >= 130 && stage === "down") {
-  //     stage = "up";
-  //     counter = counter + 1;
-  //     console.log("Good move!");
-  //   } else if (
-  //     leftKneeExtensionAngle < 130 &&
-  //     leftKneeExtensionAngle > 110 &&
-  //     stage === "down"
-  //   ) {
-  //     console.log("Extend more");
-  //   }
-  //  else if (leftKneeExtensionAngle < 130 && leftKneeExtensionAngle > 110 && stage === "up"){
-  //   console.log("retrive to the initial position")
-  // }
     console.log("Counter = " + counter);
   
     // Draw the angles on the canvas
@@ -326,10 +312,12 @@ const PoseDetection = ({ exercise }) => {
     ideal_rom = 160 // ideal range of motion (rom) for this exercise is 160 degrees (rough estimation).
     if (angle <= 110) {
       stage = "down";
+      startExerciseFeedback();
     } else if (angle >= 130 && stage === "down") {
       counter = counter + 1
       stage = "up";
       repComplete = true
+      handleExtendMoreFeedback();
       setCounterDisplay(prevCounterDisplay => prevCounterDisplay+ 1);
     } 
     if (angle >= 130 && stage === "up" && repComplete) {
@@ -347,6 +335,7 @@ const PoseDetection = ({ exercise }) => {
         totalScore += 7
       }
       repComplete = false
+      handleFinishFeedback();
       console.log("counter = " + counter);
       console.log("rom_score for this rep = " + rom_score);
       console.log("current score = " + totalScore);
@@ -371,6 +360,7 @@ const PoseDetection = ({ exercise }) => {
     }
 
     if (!isElbowPinned(elbow, hip)){
+      keepElbowPinnedFeedback();
       console.log("Keep your elbow pinned to your side.");
       return;
     }
@@ -383,8 +373,11 @@ const PoseDetection = ({ exercise }) => {
       console.log("counter " + counter)
       minDistance = -0.18;
       notAdded = false;
+      handleExtendMoreFeedback();
+      console.log("stage = " + wristDistance)
     } else if (wristDistance < -0.18 && stage === "out") {
       minDistance = Math.min(minDistance, wristDistance);
+      handleExtendMoreFeedback();
     } else if (Math.abs(wristDistance) < 0.05 && stage === "out") {
       console.log("Forearm is moving outward.");
       stage = "in";
@@ -404,9 +397,12 @@ const PoseDetection = ({ exercise }) => {
         if (counter===10){
           finished = true;
         }
+      } else {
+        handleFinishFeedback();
       }
     } else if (Math.abs(wristDistance) < 0.05){
       stage = "in";
+      startExerciseFeedback();
     };
 
     console.log("counter = " + counter);
