@@ -472,7 +472,7 @@ const PoseDetection = ({ exercise }) => {
       {!start ? (
         // When exercise has not started, display a message or another component
         <div className = "instruction_page">
-          <h2>{instruction}</h2>
+          <h2 style={{ color: 'white' }}>{instruction}</h2>
           {gifSrc && <img src={gifSrc} alt={exercise} style={{ width: '600px', height: 'auto' }} />}
           <button className="start-exercise-button" onClick={startExercise}>Start Exercise</button>
         </div>
