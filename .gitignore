@@ -194,3 +194,9 @@ yarn-error.log*
 package-json.lock
 
 .history/
+
+/staticfiles/
+
+# Ignore Heroku CLI archive and extracted folder
+heroku-linux-x64.tar.gz
+heroku/
