@@ -147,7 +147,7 @@ const GamingPage = () => {
         sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
       >
         <Toolbar>
-        <img
+          <img
             src={AppLogo}
             alt="Logo"
             style={{ height: '40px', cursor: 'pointer' }} // Style as needed
