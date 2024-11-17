@@ -68,6 +68,10 @@ const PoseDetection = ({ exercise }) => {
     showThrottledFeedback("Good job! Keep pushing!", "warning", 2000); // Feedback every 3 seconds
   };
 
+  const handlePushMoreFeedback = () => { 
+    showThrottledFeedback("Push more! Keep improving your form.", "warning", 2000); // Feedback every
+  };
+  
   const handleFinishFeedback = () => {
     showThrottledFeedback("You finished this round, plese move to the initial position!", "success", 2000); // Feedback every 3 seconds
   };
@@ -319,7 +323,9 @@ const PoseDetection = ({ exercise }) => {
       repComplete = true
       handleExtendMoreFeedback();
       setCounterDisplay(prevCounterDisplay => prevCounterDisplay+ 1);
-    } 
+    } else if (angle >= 110 & angle < 130 && stage === "down") {
+      handlePushMoreFeedback();
+    }
     if (angle >= 130 && stage === "up" && repComplete) {
       console.log("ROM Score:", Math.round((angle / ideal_rom) * 100));
       // rom score = ((actual rom) / (ideal rom)) * 100
