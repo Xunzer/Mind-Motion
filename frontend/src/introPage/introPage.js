@@ -13,22 +13,26 @@ const IntroPage = () => {
   const featureData = [
     {
       title: 'Personalized Recovery',
-      description: 'Tailored exercises to help you regain motor skills and build confidence.',
+      description: `Tailored exercises to help you regain motor skills and build confidence. 
+      Our program adapts to your specific recovery needs, ensuring you achieve steady and meaningful progress.`,
       icon: <FitnessCenter fontSize="large" color="primary" />,
     },
     {
       title: 'Real-Time Motion Tracking',
-      description: 'Precise tracking of hand and body movements ensures effective recovery.',
+      description: `Precise tracking of hand and body movements ensures effective recovery. 
+      Using advanced motion detection technology, our system provides immediate feedback to help you improve.`,
       icon: <TrackChanges fontSize="large" color="primary" />,
     },
     {
       title: 'Progress Analytics',
-      description: 'Detailed insights into your recovery journey to help you stay motivated.',
+      description: `Detailed insights into your recovery journey to help you stay motivated. 
+      Track milestones, visualize trends, and understand how your efforts translate into measurable progress.`,
       icon: <Timeline fontSize="large" color="primary" />,
     },
     {
       title: 'Gamified Engagement',
-      description: 'Make recovery fun with interactive challenges and rewards.',
+      description: `Make recovery fun with interactive challenges and rewards. 
+      Complete daily tasks, earn badges, and compete in friendly challenges to stay motivated and engaged.`,
       icon: <EmojiEvents fontSize="large" color="primary" />,
     },
   ];
@@ -71,20 +75,21 @@ const IntroPage = () => {
         <Grid container spacing={4} justifyContent="center">
           {featureData.map((feature, index) => (
             <Grid item xs={12} sm={6} md={3} key={index}>
-              <Card
-                sx={{
-                  height: '100%',
-                  background: '#1c313a', // Dark card background
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-                  textAlign: 'center',
-                  borderRadius: 2,
-                  '&:hover': {
-                    boxShadow: '0 6px 20px rgba(0, 0, 0, 0.5)',
-                    transform: 'scale(1.03)',
-                  },
-                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                }}
-              >
+<Card
+  sx={{
+    height: '100%',
+    background: 'rgba(28, 49, 58, 0.5)', 
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+    textAlign: 'center',
+    borderRadius: 2,
+    '&:hover': {
+      boxShadow: '0 0 20px 4px rgba(100, 181, 246, 0.8)', 
+      transform: 'scale(1.05)', 
+      background: 'rgba(28, 49, 58, 0.015)', 
+    },
+    transition: 'transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease',
+  }}
+>
                 <CardContent>
                   <Box mb={2}>{feature.icon}</Box>
                   <Typography variant="h6" fontWeight="bold" sx={{ color: '#ffffff' }}>
