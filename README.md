@@ -3,7 +3,7 @@
 
 ***
 
-## About Mind & Motion
+## About [Mind & Motion](https://mind-motion-b78f91a6b700.herokuapp.com/intro)
 
 Mind & Motion is a platform designed to support stroke rehabilitation by combining the power of machine learning and data-driven insights. The project uses a machine learning model from MediaPipe to grade exercises tailored for stroke recovery, providing real-time feedback to users. The goal of Mind & Motion is to make recovery efficient, accessible, and empowering, helping individuals regain independence and enhance their quality of life.
 
@@ -11,11 +11,7 @@ The platform offers a supportive digital environment where patients can perform 
 
 
 
-
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=RonOCAKG_44&ab_channel=gallvvin
-" target="_blank"><img src="http://img.youtube.com/vi/RonOCAKG_44&ab_channel=gallvvin/0.jpg" 
-alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>
-
+### Watch our demo [here](https://www.youtube.com/watch?v=RonOCAKG_44&ab_channel=gallvvin) 
 
 
 
