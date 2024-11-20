@@ -12,8 +12,9 @@ The platform offers a supportive digital environment where patients can perform 
 
 
 
-### Place holder for gifs/video of project
-
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=RonOCAKG_44&ab_channel=gallvvin
+" target="_blank"><img src="http://img.youtube.com/vi/RonOCAKG_44&ab_channel=gallvvin/0.jpg" 
+alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>
 
 
 
