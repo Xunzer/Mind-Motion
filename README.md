@@ -11,7 +11,7 @@ The platform offers a supportive digital environment where patients can perform 
 
 
 
-### Watch our demo [here](https://www.youtube.com/watch?v=RonOCAKG_44&ab_channel=gallvvin) 
+### Watch our demo [here.](https://www.youtube.com/watch?v=RonOCAKG_44&ab_channel=gallvvin) 
 
 
 
